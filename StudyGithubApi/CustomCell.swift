@@ -10,5 +10,5 @@ import UIKit
 class CustomCell: UITableViewCell {
 
     @IBOutlet weak var titleLable: UILabel!
-
+    @IBOutlet weak var titleImage: UIImageView!
 }

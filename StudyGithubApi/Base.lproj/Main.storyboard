@@ -29,15 +29,20 @@
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
                                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cKp-kI-tCX">
-                                                    <rect key="frame" x="103" y="11" width="101" height="21"/>
+                                                    <rect key="frame" x="142" y="0.0" width="252" height="44"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="19"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="0Bv-Be-fXL">
+                                                    <rect key="frame" x="20" y="0.0" width="93" height="44"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
+                                            <outlet property="titleImage" destination="0Bv-Be-fXL" id="ec3-fu-PWx"/>
                                             <outlet property="titleLable" destination="cKp-kI-tCX" id="vRA-2x-sGb"/>
                                         </connections>
                                     </tableViewCell>
@@ -58,6 +63,7 @@
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <connections>
+                        <outlet property="tableView" destination="L0K-of-uD5" id="6PJ-VT-LVj"/>
                         <outlet property="tittleLabel" destination="2oz-vI-Y76" id="yzx-Fn-Ml2"/>
                     </connections>
                 </viewController>
