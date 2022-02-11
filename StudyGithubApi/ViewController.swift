@@ -10,7 +10,7 @@ import UIKit
 struct User: Codable {
     let body: String
     let title: String
- }
+}
 
 
 class ViewController: UIViewController  {
