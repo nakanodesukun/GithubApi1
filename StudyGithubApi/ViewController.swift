@@ -6,6 +6,7 @@
 //
 
 import UIKit
+// Protocolでジェネリクスを定義する方法がわからない
 //protocol IssueApi {
 //    func fetchIssues<T: Decodable>(completion: (T) -> ())
 //}
@@ -34,33 +35,36 @@ class ViewController: UIViewController {
 //        fetchIssues { (Issue) in
 //            Issue.forEach {(print($0.number))}
 //        }
+       // urlStringの引数を列挙にしたい
         // 配列の中に辞書データが入っている
-        fetchIssues { (Issues: [Issue]) in
+        fetchIssues(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (Issues: [Issue]) in
             Issues.forEach {(print($0.body))}
         }
     }
-    func fetchIssues(completion: @escaping ([Issue]) -> ()) {
-        let urlString = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
-        let url = URL(string: urlString)
-        URLSession.shared.dataTask(with: url!) { (data, response, err) in
-            guard let data = data else {
-                print("dataの取得に失敗しました")
-                return
-            }
-            do {
-                let homfeed = try JSONDecoder().decode([Issue].self, from: data)
-                completion(homfeed)
-            } catch let jsonErr {
-                print("dataの取得に失敗しました\(jsonErr)")
-            }
-        }.resume()
-    }
+
+//    func fetchIssues(completion: @escaping ([Issue]) -> ()) {
+//        let urlString = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+//        let url = URL(string: urlString)
+//        URLSession.shared.dataTask(with: url!) { (data, response, err) in
+//            guard let data = data else {
+//                print("dataの取得に失敗しました")
+//                return
+//            }
+//            do {
+//                let homfeed = try JSONDecoder().decode([Issue].self, from: data)
+//                completion(homfeed)
+//            } catch let jsonErr {
+//                print("dataの取得に失敗しました\(jsonErr)")
+//            }
+//        }.resume()
+//    }
+
     /*
     ジェネリクスを使ってどんな方でも許容する。汎用性が高い。URLから取得したJSONの型によって配列の有無が異なる。
     その為、関数の内部でdecodeする時に配列にするかどうか切り替えなければならい。よって、ジェネリクスを使い関数内部処理しないようにする。
     */
-    func fetchIssues<T: Decodable>(completion: @escaping (T) -> ()) {
-        let urlString = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+    func fetchIssues<T: Decodable>(urlString: String, completion: @escaping (T) -> ()) {
+        let urlString = urlString
         let url = URL(string: urlString)
         URLSession.shared.dataTask(with: url!) { (data, response, err) in
             guard let data = data else {
@@ -74,44 +78,7 @@ class ViewController: UIViewController {
                 print("dataの取得に失敗しました\(jsonErr)")
             }
         }.resume()
-
     }
-
-
-
-
-
-//    func GithubApi() {
-//        guard let url = URL(string: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") else { return }
-//        //　いらない
-//        var request = URLRequest(url: url)
-//        request.httpMethod = "GET"
-//
-//        let task = URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
-//            if let error = error {
-//                print("情報の取得に失敗しました")
-//                return
-//            }
-//
-//            if let data = data {
-//                do {
-////                    let github = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-//                                  //   指定したものだけ取り出す
-//                    let github = try JSONDecoder().decode([Issue] .self, from: data)
-//                    print("情報の取得に成功しました")
-////                    print(github)
-////                    print(github[3])
-//                    DispatchQueue.main.async {
-//                        github.forEach({print(($0.title))})
-//                        }
-//
-//                } catch(let err) {
-//                    print(err)
-//                }
-//            }
-//        })
-//        task.resume()
-//    }
 }
 
 
@@ -124,7 +91,7 @@ extension ViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
-
+//            cell.titleLable.text =
         return cell
     }
 }
