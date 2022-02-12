@@ -6,6 +6,9 @@
 //
 
 import UIKit
+//protocol IssueApi {
+//    func fetchIssues<T: Decodable>(completion: (T) -> ())
+//}
 
 
 struct Issue: Codable {
@@ -21,45 +24,94 @@ struct Issue: Codable {
     }
 }
 
-class ViewController: UIViewController  {
+class ViewController: UIViewController {
+
 
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tittleLabel: UILabel!
     override func viewDidLoad() {
         super.viewDidLoad()
-        GithubApi()
+//        fetchIssues { (Issue) in
+//            Issue.forEach {(print($0.number))}
+//        }
+        // 配列の中に辞書データが入っている
+        fetchIssues { (Issues: [Issue]) in
+            Issues.forEach {(print($0.body))}
+        }
     }
-    func GithubApi() {
-        guard let url = URL(string: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") else { return }
-        //　いらない
-        var request = URLRequest(url: url)
-        request.httpMethod = "GET"
-
-        let task = URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
-            if let error = error {
-                print("情報の取得に失敗しました")
+    func fetchIssues(completion: @escaping ([Issue]) -> ()) {
+        let urlString = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+        let url = URL(string: urlString)
+        URLSession.shared.dataTask(with: url!) { (data, response, err) in
+            guard let data = data else {
+                print("dataの取得に失敗しました")
                 return
             }
-
-            if let data = data {
-                do {
-//                    let github = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
-                                  //   指定したものだけ取り出す
-                    let github = try JSONDecoder().decode(Issue.self, from: data)
-                    print("情報の取得に成功しました")
-                    print(github)
-//                    print(github[3])
-                    DispatchQueue.main.async {
-//
-                        }
-
-                } catch(let err) {
-                    print(err)
-                }
+            do {
+                let homfeed = try JSONDecoder().decode([Issue].self, from: data)
+                completion(homfeed)
+            } catch let jsonErr {
+                print("dataの取得に失敗しました\(jsonErr)")
             }
-        })
-        task.resume()
+        }.resume()
     }
+    /*
+    ジェネリクスを使ってどんな方でも許容する。汎用性が高い。URLから取得したJSONの型によって配列の有無が異なる。
+    その為、関数の内部でdecodeする時に配列にするかどうか切り替えなければならい。よって、ジェネリクスを使い関数内部処理しないようにする。
+    */
+    func fetchIssues<T: Decodable>(completion: @escaping (T) -> ()) {
+        let urlString = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+        let url = URL(string: urlString)
+        URLSession.shared.dataTask(with: url!) { (data, response, err) in
+            guard let data = data else {
+                print("dataの取得に失敗しました")
+                return
+            }
+            do {
+                let obj = try JSONDecoder().decode(T.self, from: data)
+                completion(obj)
+            } catch let jsonErr {
+                print("dataの取得に失敗しました\(jsonErr)")
+            }
+        }.resume()
+
+    }
+
+
+
+
+
+//    func GithubApi() {
+//        guard let url = URL(string: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") else { return }
+//        //　いらない
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "GET"
+//
+//        let task = URLSession.shared.dataTask(with: url, completionHandler: { data, response, error in
+//            if let error = error {
+//                print("情報の取得に失敗しました")
+//                return
+//            }
+//
+//            if let data = data {
+//                do {
+////                    let github = try JSONSerialization.jsonObject(with: data, options: .fragmentsAllowed)
+//                                  //   指定したものだけ取り出す
+//                    let github = try JSONDecoder().decode([Issue] .self, from: data)
+//                    print("情報の取得に成功しました")
+////                    print(github)
+////                    print(github[3])
+//                    DispatchQueue.main.async {
+//                        github.forEach({print(($0.title))})
+//                        }
+//
+//                } catch(let err) {
+//                    print(err)
+//                }
+//            }
+//        })
+//        task.resume()
+//    }
 }
 
 
