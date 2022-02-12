@@ -13,7 +13,7 @@ struct Issue: Codable {
     let title: String // 一覧画面・詳細画面に表示
     let body: String // 詳細画面に表示
     let url: URL // 詳細画面に表示し、それをタップしたらSafariViewControllerで開く
-    let updatedAt: Date? // 一覧画面・詳細画面に表示   // codingkeyが必要！！ここstring?に変更
+    let updatedAt: String // 一覧画面・詳細画面に表示   // codingkeyが必要！！ここstring?に変更stringで取得してformattoする？？
     let user: User? // 一覧画面にアバター画像と名前を表示
 
     enum CodingKeys: String, CodingKey {
@@ -81,6 +81,7 @@ class ViewController: UIViewController {
     func fetchIssues<T: Decodable>(urlString: String, completion: @escaping (T) -> ()) {
         let urlString = urlString
         let url = URL(string: urlString)
+
         URLSession.shared.dataTask(with: url!) { (data, response, err) in
             if let err = err {
                 print(err)
@@ -90,6 +91,7 @@ class ViewController: UIViewController {
                 return
             }
             do {
+                print(response)
                 let obj = try JSONDecoder().decode(T.self, from: data)
                 completion(obj)
             } catch let jsonErr {
@@ -110,9 +112,18 @@ extension ViewController: UITableViewDataSource {
         cell.titleLable.numberOfLines = 0
         cell.titleLable.text = IssueArry?[indexPath.row].title
         if let update = IssueArry?[indexPath.row].updatedAt  {
-            cell.updateDateLabel.text = "更新日-------\(update)"
-            print(update)
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+            dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
+            let date = dateFormatter.date(from: update)
+            if let date = date {
+                cell.updateDateLabel.text = "更新日\(date)"
+                print(update)
+            }
+
         } else {
+
             cell.updateDateLabel.text = "更新日\(IssueArry?[indexPath.row])"
         }
 //        cell .updateDateLabel.text = IssueArry?[indexPath.row].updatedAt
