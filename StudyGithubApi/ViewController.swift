@@ -6,24 +6,32 @@
 //
 
 import UIKit
-// Protocolでジェネリクスを定義する方法がわからない
-//protocol IssueApi {
-//    func fetchIssues<T: Decodable>(completion: (T) -> ())
-//}
-
+import Foundation
 
 struct Issue: Codable {
-    let number: Int
+    let number: Int?
     let title: String // 一覧画面・詳細画面に表示
     let body: String // 詳細画面に表示
     let url: URL // 詳細画面に表示し、それをタップしたらSafariViewControllerで開く
-    let updatedAt: Date? // 一覧画面・詳細画面に表示
-    let user: User // 一覧画面にアバター画像と名前を表示
-    struct User: Codable {
-        let login: String // ユーザー名
-        let avaterURL: URL?
+    let updatedAt: Date? // 一覧画面・詳細画面に表示   // codingkeyが必要！！ここstring?に変更
+    let user: User? // 一覧画面にアバター画像と名前を表示
+
+    enum CodingKeys: String, CodingKey {
+        case number, title, body, url, user
+        case updatedAt = "updated_at"
     }
 }
+struct User: Codable {
+    let login: String // ユーザー名
+    let avaterURL: URL?
+    enum CodingKeys: String, CodingKey {
+        case login
+        case avaterURL = "avatar_url"
+    }
+
+}
+
+
 
 class ViewController: UIViewController {
     enum urlString {
@@ -74,6 +82,9 @@ class ViewController: UIViewController {
         let urlString = urlString
         let url = URL(string: urlString)
         URLSession.shared.dataTask(with: url!) { (data, response, err) in
+            if let err = err {
+                print(err)
+            }
             guard let data = data else {
                 print("dataの取得に失敗しました")
                 return
@@ -82,7 +93,7 @@ class ViewController: UIViewController {
                 let obj = try JSONDecoder().decode(T.self, from: data)
                 completion(obj)
             } catch let jsonErr {
-                print("dataの取得に失敗しました\(jsonErr)")
+                print("デコードに失敗しました\(jsonErr)")
             }
         }.resume()
     }
@@ -96,7 +107,15 @@ extension ViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
-        cell.titleLable.text = IssueArry?[indexPath.row].body
+        cell.titleLable.numberOfLines = 0
+        cell.titleLable.text = IssueArry?[indexPath.row].title
+        if let update = IssueArry?[indexPath.row].updatedAt  {
+            cell.updateDateLabel.text = "更新日-------\(update)"
+            print(update)
+        } else {
+            cell.updateDateLabel.text = "更新日\(IssueArry?[indexPath.row])"
+        }
+//        cell .updateDateLabel.text = IssueArry?[indexPath.row].updatedAt
 
         return cell
     }
