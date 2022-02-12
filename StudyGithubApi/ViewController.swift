@@ -26,8 +26,11 @@ struct Issue: Codable {
 }
 
 class ViewController: UIViewController {
+    enum urlString {
+        static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+    }
 
-
+    var IssueArry: [Issue]?
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tittleLabel: UILabel!
     override func viewDidLoad() {
@@ -37,9 +40,13 @@ class ViewController: UIViewController {
 //        }
        // urlStringの引数を列挙にしたい
         // 配列の中に辞書データが入っている
-        fetchIssues(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (Issues: [Issue]) in
-            Issues.forEach {(print($0.body))}
+        fetchIssues(urlString: urlString.TodoAppUrl) { (Issues: [Issue]) in
+            // 配列に入っている辞書データを用意した空の配列に保持。保持したものをTableViewCellに保存したい
+//            Issues.forEach {(print($0.body))}
+            self.IssueArry = Issues
+            self.tableView.reloadData()
         }
+
     }
 
 //    func fetchIssues(completion: @escaping ([Issue]) -> ()) {
@@ -82,16 +89,15 @@ class ViewController: UIViewController {
 }
 
 
-
-
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return IssueArry?.count ?? 2
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
-//            cell.titleLable.text =
+        cell.titleLable.text = IssueArry?[indexPath.row].body
+
         return cell
     }
 }
