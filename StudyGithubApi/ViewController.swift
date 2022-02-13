@@ -80,6 +80,8 @@ class ViewController: UIViewController {
     func fetchIssues<T: Decodable>(urlString: String, completion: @escaping (T) -> ()) {
         let urlString = urlString
         let url = URL(string: urlString)
+//        var request = URLRequest(url: url)
+//        request.httpMethod = "GET"
 
         URLSession.shared.dataTask(with: url!) { (data, response, err) in
             if let err = err {
@@ -134,18 +136,23 @@ extension ViewController: UITableViewDataSource {
 //        } else {
 //            print("取得に失敗しました")
 //        }
-        let urlString = "https://avatars.githubusercontent.com/u/72324850?v=4"
-        let url = URL(string: urlString)
+        let urlString = IssueArry?[indexPath.row].user?.avaterURL
+        let url = URL(string: "\(urlString)")
 
 
         do {
             let data = try Data(contentsOf: url!)
             cell.avaterImageView.image = UIImage(data: data)
-        } catch {
-            print("エラーです")
+        } catch  let err{
+            print("エラーです\(err)")
         }
-
-
+        do {
+            let url = URL(string: "https://avatars.githubusercontent.com/u/72324850?v=4")
+            let data = try Data(contentsOf: url!)
+            cell.avaterImageView.image = UIImage(data: data)
+        } catch {
+            print("モックデータの表示に失敗しました")
+        }
 
 //        cell .updateDateLabel.text = IssueArry?[indexPath.row].updatedAt
 
