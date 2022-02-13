@@ -11,5 +11,5 @@ class CustomCell: UITableViewCell {
 
     @IBOutlet weak var titleLable: UILabel!
     @IBOutlet weak var updateDateLabel: UILabel!
-    @IBOutlet weak var titleImage: UIImageView!
+    @IBOutlet weak var avaterImageView: UIImageView!
 }

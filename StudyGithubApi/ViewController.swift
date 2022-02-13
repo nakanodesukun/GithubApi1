@@ -26,9 +26,8 @@ struct User: Codable {
     let avaterURL: URL?
     enum CodingKeys: String, CodingKey {
         case login
-        case avaterURL = "avatar_url"
+        case avaterURL = "avatar_url"    //   URLが取得されるので対処必要
     }
-
 }
 
 
@@ -37,11 +36,11 @@ class ViewController: UIViewController {
     enum urlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
     }
-
     var IssueArry: [Issue]?
     @IBOutlet weak var tableView: UITableView!
     @IBOutlet weak var tittleLabel: UILabel!
     override func viewDidLoad() {
+
         super.viewDidLoad()
 //        fetchIssues { (Issue) in
 //            Issue.forEach {(print($0.number))}
@@ -52,7 +51,7 @@ class ViewController: UIViewController {
             // 配列に入っている辞書データを用意した空の配列に保持。保持したものをTableViewCellに保存したい
 //            Issues.forEach {(print($0.body))}
             self.IssueArry = Issues
-            self.tableView.reloadData()
+//            self.tableView.reloadData() // DispatchQue.main.asnyc{}に書き込めば紫色が消えた
         }
 
     }
@@ -91,9 +90,11 @@ class ViewController: UIViewController {
                 return
             }
             do {
-                print(response)
                 let obj = try JSONDecoder().decode(T.self, from: data)
                 completion(obj)
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
             } catch let jsonErr {
                 print("デコードに失敗しました\(jsonErr)")
             }
@@ -113,19 +114,39 @@ extension ViewController: UITableViewDataSource {
         cell.titleLable.text = IssueArry?[indexPath.row].title
         if let update = IssueArry?[indexPath.row].updatedAt  {
             let dateFormatter = DateFormatter()
-            dateFormatter.locale = Locale(identifier: "en_US_POSIX")
+            dateFormatter.locale = Locale(identifier: "ja_JP")
             dateFormatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
             dateFormatter.timeZone = TimeZone(secondsFromGMT: 0)
             let date = dateFormatter.date(from: update)
             if let date = date {
                 cell.updateDateLabel.text = "更新日\(date)"
                 print(update)
+                print(date)
             }
 
         } else {
 
             cell.updateDateLabel.text = "更新日\(IssueArry?[indexPath.row])"
         }
+//        if  let avatarImage = IssueArry?[indexPath.row].user?.avaterURL {
+//            print("取得に成功しました\(avatarImage)")
+//
+//        } else {
+//            print("取得に失敗しました")
+//        }
+        let urlString = "https://avatars.githubusercontent.com/u/72324850?v=4"
+        let url = URL(string: urlString)
+
+
+        do {
+            let data = try Data(contentsOf: url!)
+            cell.avaterImageView.image = UIImage(data: data)
+        } catch {
+            print("エラーです")
+        }
+
+
+
 //        cell .updateDateLabel.text = IssueArry?[indexPath.row].updatedAt
 
         return cell
