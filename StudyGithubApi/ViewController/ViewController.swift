@@ -9,32 +9,46 @@ import UIKit
 import Foundation
 
 class ViewController: UIViewController {
-    var arry:[Issue] = []
+//    var delegate: IssueApiDelegate?
 
-    
-    enum urlString {
-        static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
-    }
+    var arry:[Issue] = []
+    let analyzeModelView  = AnalyzeViewModel()
+
+
 
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        let  analyzeModelView = AnalyzeViewModel()
-        analyzeModelView.analyze(urlString: urlString.TodoAppUrl) { (Issue) in
-            Issue.forEach({print($0.title)})
-            DispatchQueue.main.async {
-                self.arry = Issue
-                self.tableView.reloadData()
-            }
-        } err: {
-            DispatchQueue.main.async {
-                self.alert()
-            }
-        }
+        getUer()
+
     }
     @IBAction func exit(segue:UIStoryboardSegue)  {
 
-            }
+    }
+
+    func getUer() {
+        analyzeModelView.analyze(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (Issue) in
+
+            DispatchQueue.main.async { [self] in
+       //                self.delegate?.fetchIssues(sucesse: Issue)
+               Issue.forEach({print($0.title)})
+               arry = Issue
+               self.tableView.reloadData()
+           }
+       } failure: {
+           DispatchQueue.main.async {
+               self.alert()
+           }
+       }
+    }
+    func alert() { 
+        let dialog = UIAlertController(title: "タイトル", message: "サブタイトル", preferredStyle: .alert)
+        //ボタンのタイトル
+        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        //実際に表示させる
+        present(dialog, animated: true, completion: nil)
+    }
+
 
 }
 
@@ -53,19 +67,25 @@ extension ViewController: UITableViewDataSource {
         cell.avaterImageView.image = arry[indexPath.row].user.avaterURL as? UIImage
         return cell
     }
-    func alert() {
-        let title = "通信に失敗しました"
-        let message = "リトライしますか?"
-        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
-        let ok = UIAlertAction(title: "リトライ", style: .default, handler: nil)
-        alert.addAction(ok)
-        present(alert, animated: true, completion: nil)
-    }
+
+
 }
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // セルの選択を解除
      tableView.deselectRow(at: indexPath, animated: true)
-        performSegue(withIdentifier: "Cell2", sender: nil)
+
+        // 画面遷移
+        performSegue(withIdentifier: "Cell2", sender: indexPath.row)
+
+    }
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "Cell2" {
+            let nav = segue.destination as! UINavigationController
+            let detaileViewController = nav.topViewController as! DetailViewController
+            detaileViewController.detail = arry
+            // モデルそのものを渡す
+            detaileViewController.title = 
+        }
     }
 }
