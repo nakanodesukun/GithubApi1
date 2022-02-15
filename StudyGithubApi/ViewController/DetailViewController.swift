@@ -11,12 +11,13 @@ class DetailViewController: UIViewController {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bodyLabel: UILabel!
 
-    var title: String?
+//    var title: String?
     var detail:[Issue] = []
+    var selectedText: Int?
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(detail)
-
+        detail.forEach({print($0.body)})
+    
     }
 
     @IBAction func didTapUrlButton(_ sender: Any) {

@@ -6,14 +6,16 @@
 //
 
 import Foundation
-protocol IssueApiDelegate: AnyObject  {
-    func fetchIssues(sucesse: [Issue])
-}
+//protocol IssueApiDelegate: AnyObject  {
+//    func fetchIssues(sucesse: [Issue])
+//}
 
-class AnalyzeViewModel {
-    // 副作用のあるメソッドに
-    func analyze(urlString: String, sucesse: @escaping ([Issue]) -> (), failure: @escaping () -> ()) {
+class ApiModel {
+    // 副作用のあるメソッドなので動詞 Jsonに準拠させる　　　　　　　　　　　　　　　// どんなな型でも入れられる.
+    func fetchData<T: Decodable>(urlString: String, sucesse: @escaping (T) -> (), failure: @escaping () -> ()) {
         guard let url = URL(string: urlString) else { return }  // completionHandler内ではDelegateが使えない
+        var request = URLRequest(url: url)
+               request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             if let error = error {
                 print("error", error.localizedDescription)
@@ -25,9 +27,7 @@ class AnalyzeViewModel {
             }
             do {
                 //↓ decodeしたときに中身が配列に入っているため
-                let issueDecode = try JSONDecoder().decode([Issue].self, from: data)
-                // 画面遷移する際delegateで特定の情報だけ渡すべき？？[[String: Any]]で入っている
-                let issueTitle = issueDecode.map{$0.title }
+                let issueDecode = try JSONDecoder().decode(T.self, from: data)
                 // 現在サブスレッドなのでメインスレッドへ
                 DispatchQueue.main.async {
                     sucesse(issueDecode)

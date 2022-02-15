@@ -9,10 +9,11 @@ import UIKit
 import Foundation
 
 class ViewController: UIViewController {
-//    var delegate: IssueApiDelegate?
-
+    //    var delegate: IssueApiDelegate?
+    // 値を格納(TableView表示用)
     var arry:[Issue] = []
-    let analyzeModelView  = AnalyzeViewModel()
+    // ApiModelを呼び出し
+    let apiModel = ApiModel()
 
 
 
@@ -26,25 +27,24 @@ class ViewController: UIViewController {
 
     }
 
-    func getUer() {
-        analyzeModelView.analyze(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (Issue) in
+    func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
+        apiModel.fetchData(urlString: "https://api.gith.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
 
-            DispatchQueue.main.async { [self] in
-       //                self.delegate?.fetchIssues(sucesse: Issue)
-               Issue.forEach({print($0.title)})
-               arry = Issue
-               self.tableView.reloadData()
-           }
-       } failure: {
-           DispatchQueue.main.async {
-               self.alert()
-           }
-       }
+                //  DespatchQueはいらない。なぜならこの時点では同期処理となっているから
+                issue.forEach({print($0.body)})
+            self.arry = issue
+//                print(arry)
+                self.tableView.reloadData()
+        } failure: {
+            DispatchQueue.main.async {
+                self.alert()
+            }
+        }
     }
-    func alert() { 
-        let dialog = UIAlertController(title: "タイトル", message: "サブタイトル", preferredStyle: .alert)
+    func alert() {
+        let dialog = UIAlertController(title: "エラー", message: "リトライしますか？", preferredStyle: .alert)
         //ボタンのタイトル
-        dialog.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        dialog.addAction(UIAlertAction(title: "リトライ", style: .default, handler: nil))
         //実際に表示させる
         present(dialog, animated: true, completion: nil)
     }
@@ -73,8 +73,9 @@ extension ViewController: UITableViewDataSource {
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // セルの選択を解除
-     tableView.deselectRow(at: indexPath, animated: true)
+        //     tableView.deselectRow(at: indexPath, animated: true)
 
+        tableView.deselectRow(at: indexPath, animated: true)
         // 画面遷移
         performSegue(withIdentifier: "Cell2", sender: indexPath.row)
 
@@ -83,9 +84,6 @@ extension ViewController: UITableViewDelegate {
         if segue.identifier == "Cell2" {
             let nav = segue.destination as! UINavigationController
             let detaileViewController = nav.topViewController as! DetailViewController
-            detaileViewController.detail = arry
-            // モデルそのものを渡す
-            detaileViewController.title = 
         }
     }
 }
