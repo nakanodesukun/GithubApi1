@@ -14,7 +14,7 @@ class ViewController: UIViewController {
     var arry:[Issue] = []
     // ApiModelを呼び出し
     let apiModel = ApiModel()
-
+    var selectedText: Issue?
 
 
     @IBOutlet weak var tableView: UITableView!
@@ -28,7 +28,7 @@ class ViewController: UIViewController {
     }
 
     func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
-        apiModel.fetchData(urlString: "https://api.gith.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
+        apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
 
                 //  DespatchQueはいらない。なぜならこの時点では同期処理となっているから
                 issue.forEach({print($0.body)})
@@ -74,16 +74,18 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // セルの選択を解除
         //     tableView.deselectRow(at: indexPath, animated: true)
-
+        // 詳細画面に特定のデータを渡す
+        selectedText = arry[indexPath.row]
         tableView.deselectRow(at: indexPath, animated: true)
         // 画面遷移
-        performSegue(withIdentifier: "Cell2", sender: indexPath.row)
+        performSegue(withIdentifier: "showDetails", sender: self)
 
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "Cell2" {
+        if segue.identifier == "showDetails" {
             let nav = segue.destination as! UINavigationController
             let detaileViewController = nav.topViewController as! DetailViewController
+            detaileViewController.selectedText = selectedText
         }
     }
 }
