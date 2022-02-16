@@ -12,7 +12,7 @@ class ViewController: UIViewController {
     // 値を格納(TableView表示用)
     var arry:[Issue] = []
     //　アイコン取得
-    var icon: UIImage?
+    var icon = [UIImage]()
 
     // 値を渡すグローバル変数
     var selectedText: Issue?
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
     }
 
     func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
-        apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
+        apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/FoldingMemoApp/issues") { (issue: [Issue]) in
             DispatchQueue.main.async { [weak self] in
                 self?.arry = issue
 //                print(self?.arry[0].user.avaterURL)
@@ -54,8 +54,8 @@ class ViewController: UIViewController {
         imageDownloderModel.downloadImage(url: url) { image in
             self.imageDownloderModel.downloadImage(url: url) { image in
                 DispatchQueue.main.async { [weak self] in
-                    self?.icon = image
-                    print(image)
+                    self?.icon.append(image)
+                    print(image.description)
                     self?.tableView.reloadData()
                 }
             }
@@ -88,7 +88,7 @@ extension ViewController: UITableViewDataSource {
 //        cell.iconView.image = arry[indexPath.row].user.avaterURL
         getImage(url: arry[indexPath.row].user.avaterURL)
         // 画像の取得ができない
-        cell.iconView.image = icon
+        cell.iconView.image = icon.first
         return cell
     }
 
