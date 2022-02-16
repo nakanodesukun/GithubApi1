@@ -6,8 +6,9 @@
 //
 
 import UIKit
+import SafariServices
 
-class DetailViewController: UIViewController {
+class DetailViewController: UIViewController, SFSafariViewControllerDelegate {
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var bodyLabel: UILabel!
     @IBOutlet weak var didTapUrllabel: UIButton!
@@ -25,10 +26,9 @@ class DetailViewController: UIViewController {
     }
 
     @IBAction func didTapUrlButton(_ sender: Any) {
-        if let url = URL(string: "\(selectedText.url)") {
-            let request = URLRequest(url: url)
-
-            
+        let url = URL(string: "\(selectedText.url)")
+        let safariVc = SFSafariViewController(url: url!)
+         present(safariVc, animated: true, completion: nil)
         }
     }
-}
+

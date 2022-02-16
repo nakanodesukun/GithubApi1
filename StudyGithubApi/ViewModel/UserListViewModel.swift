@@ -7,7 +7,6 @@
 
 import Foundation
 class UserListModel {
-    
     var issueUser:[Issue] = []
     enum urlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
