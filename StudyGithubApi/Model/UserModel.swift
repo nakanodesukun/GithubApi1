@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Issue: Codable {
+struct Issue: Codable  {
     let number: Int
     let title: String // 一覧画面・詳細画面に表示
     let body: String // 詳細画面に表示

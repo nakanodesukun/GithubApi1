@@ -10,11 +10,11 @@ import UIKit
 
 
 class ImageDownloderModel {
-    func downloadImage(urlString: String, success: @escaping(UIImage) -> Void) {
-        guard let url = URL(string: urlString) else {
-            print("エラー")
-            return
-        }
+    func downloadImage(url: URL, success: @escaping(UIImage) -> Void) {
+//        guard let url = URL(string: urlString) else {
+//            print("エラー")
+//            return
+//        }
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in

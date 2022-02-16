@@ -11,12 +11,14 @@ import Foundation
 class ViewController: UIViewController {
     // 値を格納(TableView表示用)
     var arry:[Issue] = []
-
-
+    //　アイコン取得
     var icon: UIImage?
+
     // 値を渡すグローバル変数
     var selectedText: Issue?
 
+//    var avaterUrlArray = [Issue]()
+    var avaterUrlArray = [UIImage]()
     let apiModel = ApiModel()
     let imageDownloderModel = ImageDownloderModel()
 
@@ -27,7 +29,6 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         getUer()
-        getImage()
 
     }
     @IBAction func exit(segue:UIStoryboardSegue)  {
@@ -36,31 +37,29 @@ class ViewController: UIViewController {
 
     func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
         apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
-
             DispatchQueue.main.async { [weak self] in
-
-                issue.forEach({print($0.user.avaterURL)})
                 self?.arry = issue
-                print(issue)
+//                print(self?.arry[0].user.avaterURL)
+//                self?.avaterUrlString = arry.filter{ $0 != "title"}
                 self?.tableView.reloadData()
             }
-
         } failure: {
             DispatchQueue.main.async {
                 self.alert()
             }
         }
-        imageDownloderModel.downloadImage(urlString: "https://avatars.githubusercontent.com/u/599842?v=4") { image in
-            DispatchQueue.main.async { [weak self] in
-                self?.icon = image
-                self?.tableView.reloadData()
-            }
-
-        }
-
-
     }
-    func getImage() {
+
+    func getImage(url: URL) {
+        imageDownloderModel.downloadImage(url: url) { image in
+            self.imageDownloderModel.downloadImage(url: url) { image in
+                DispatchQueue.main.async { [weak self] in
+                    self?.icon = image
+                    print(image)
+                    self?.tableView.reloadData()
+                }
+            }
+        }
     }
 
     func alert() {
@@ -85,6 +84,9 @@ extension ViewController: UITableViewDataSource {
         cell.titleLable.numberOfLines = 0
         cell.titleLable.text = arry[indexPath.row].title
         cell.updateDateLabel.text = arry[indexPath.row].updatedAt
+
+//        cell.iconView.image = arry[indexPath.row].user.avaterURL
+        getImage(url: arry[indexPath.row].user.avaterURL)
         // 画像の取得ができない
         cell.iconView.image = icon
         return cell
