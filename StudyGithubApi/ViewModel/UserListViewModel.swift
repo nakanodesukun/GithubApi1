@@ -13,21 +13,5 @@ class UserListModel {
     }
 
 
-// ViewModelのclassでsuccessだったら配列に入れる。失敗だったらクロージャーを使ってそのままViewcontrollerに渡す
-//    let analyzeModelView = AnalyzeViewModel()
-//    func getUer() {
-//        analyzeModelView.fetchData(urlString: urlString.TodoAppUrl) { (Issue) in
-//
-//              DispatchQueue.main.async {
-//          //                self.delegate?.fetchIssues(sucesse: Issue)
-//                  Issue.forEach({print($0.title)})
-//
-//              }
-//          } failure: {
-//              DispatchQueue.main.async {
-//
-//              }
-//          }
-//       }
 
 }

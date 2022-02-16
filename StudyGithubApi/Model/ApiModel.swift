@@ -26,7 +26,7 @@ class ApiModel {
                 return
             }
             do {
-                //↓ decodeしたときに中身が配列に入っているため
+                                                        // ジェネリクスを用いることで型の変換を関数内部で変更しなくて済む
                 let issueDecode = try JSONDecoder().decode(T.self, from: data)
                 // 現在サブスレッドなのでメインスレッドへ
                 DispatchQueue.main.async {

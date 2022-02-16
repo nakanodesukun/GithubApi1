@@ -48,7 +48,7 @@
                                             </subviews>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="avaterImageView" destination="0Bv-Be-fXL" id="2fQ-I7-WeS"/>
+                                            <outlet property="iconView" destination="0Bv-Be-fXL" id="lSN-x6-Y47"/>
                                             <outlet property="titleLable" destination="cKp-kI-tCX" id="Pcm-3A-GNI"/>
                                             <outlet property="updateDateLabel" destination="a6L-ng-srZ" id="scp-Bf-gaF"/>
                                         </connections>

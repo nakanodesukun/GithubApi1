@@ -9,18 +9,25 @@ import UIKit
 import Foundation
 
 class ViewController: UIViewController {
-    //    var delegate: IssueApiDelegate?
     // 値を格納(TableView表示用)
     var arry:[Issue] = []
-    // ApiModelを呼び出し
-    let apiModel = ApiModel()
+
+
+    var icon: UIImage?
+    // 値を渡すグローバル変数
     var selectedText: Issue?
+
+    let apiModel = ApiModel()
+    let imageDownloderModel = ImageDownloderModel()
+
+
 
 
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
         getUer()
+        getImage()
 
     }
     @IBAction func exit(segue:UIStoryboardSegue)  {
@@ -30,17 +37,32 @@ class ViewController: UIViewController {
     func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
         apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
 
-                //  DespatchQueはいらない。なぜならこの時点では同期処理となっているから
-                issue.forEach({print($0.body)})
-            self.arry = issue
-//                print(arry)
-                self.tableView.reloadData()
+            DispatchQueue.main.async { [weak self] in
+
+                issue.forEach({print($0.user.avaterURL)})
+                self?.arry = issue
+                print(issue)
+                self?.tableView.reloadData()
+            }
+
         } failure: {
             DispatchQueue.main.async {
                 self.alert()
             }
         }
+        imageDownloderModel.downloadImage(urlString: "https://avatars.githubusercontent.com/u/599842?v=4") { image in
+            DispatchQueue.main.async { [weak self] in
+                self?.icon = image
+                self?.tableView.reloadData()
+            }
+
+        }
+
+
     }
+    func getImage() {
+    }
+
     func alert() {
         let dialog = UIAlertController(title: "エラー", message: "リトライしますか？", preferredStyle: .alert)
         //ボタンのタイトル
@@ -64,7 +86,7 @@ extension ViewController: UITableViewDataSource {
         cell.titleLable.text = arry[indexPath.row].title
         cell.updateDateLabel.text = arry[indexPath.row].updatedAt
         // 画像の取得ができない
-        cell.avaterImageView.image = arry[indexPath.row].user.avaterURL as? UIImage
+        cell.iconView.image = icon
         return cell
     }
 
