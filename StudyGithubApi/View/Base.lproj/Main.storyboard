@@ -79,7 +79,7 @@
             </objects>
             <point key="canvasLocation" x="944.92753623188412" y="97.767857142857139"/>
         </scene>
-        <!--Detail View Controller-->
+        <!--詳細画面-->
         <scene sceneID="cfQ-se-Vm4">
             <objects>
                 <viewController id="A7Y-u0-vaT" customClass="DetailViewController" customModule="StudyGithubApi" customModuleProvider="target" sceneMemberID="viewController">
@@ -103,10 +103,10 @@
                                     <action selector="didTapUrlButton:" destination="A7Y-u0-vaT" eventType="touchUpInside" id="br7-65-bgw"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="body" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxG-z7-41q">
-                                <rect key="frame" x="75" y="458" width="297" height="166"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="body" lineBreakMode="tailTruncation" numberOfLines="9" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="qxG-z7-41q">
+                                <rect key="frame" x="0.0" y="409" width="414" height="283"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="19"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="16"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -114,7 +114,7 @@
                         <viewLayoutGuide key="safeArea" id="tey-wR-dMA"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
-                    <navigationItem key="navigationItem" id="1Qb-JK-iGm">
+                    <navigationItem key="navigationItem" title="詳細画面" id="1Qb-JK-iGm">
                         <barButtonItem key="leftBarButtonItem" systemItem="cancel" id="SH1-We-oI2">
                             <connections>
                                 <segue destination="EZx-yA-vGf" kind="unwind" unwindAction="exitWithSegue:" id="D4J-6N-I8m"/>

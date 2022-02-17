@@ -26,6 +26,7 @@ class DetailViewController: UIViewController, SFSafariViewControllerDelegate {
     }
 
     @IBAction func didTapUrlButton(_ sender: Any) {
+        //  gurd文などを使う
         let url = URL(string: "\(selectedText.url)")
         let safariVc = SFSafariViewController(url: url!)
          present(safariVc, animated: true, completion: nil)

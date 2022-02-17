@@ -8,6 +8,8 @@
 import UIKit
 import Foundation
 
+// ViewControllerに記述が多すぎる。NotificationCenterを使ってViewcontorllerの記述を減らせる？？
+
 class ViewController: UIViewController {
     // 値を格納(TableView表示用)
     var arry:[Issue] = []
@@ -23,8 +25,6 @@ class ViewController: UIViewController {
     let imageDownloderModel = ImageDownloderModel()
 
 
-
-
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,13 +34,11 @@ class ViewController: UIViewController {
     @IBAction func exit(segue:UIStoryboardSegue)  {
 
     }
-
+    // JsonでDecode　　　// urlを取得する引数を作る
     func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
-        apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/FoldingMemoApp/issues") { (issue: [Issue]) in
+        apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
             DispatchQueue.main.async { [weak self] in
                 self?.arry = issue
-//                print(self?.arry[0].user.avaterURL)
-//                self?.avaterUrlString = arry.filter{ $0 != "title"}
                 self?.tableView.reloadData()
             }
         } failure: {
@@ -49,19 +47,11 @@ class ViewController: UIViewController {
             }
         }
     }
+    // 画像を表示
 
-    func getImage(url: URL) {
-        imageDownloderModel.downloadImage(url: url) { image in
-            self.imageDownloderModel.downloadImage(url: url) { image in
-                DispatchQueue.main.async { [weak self] in
-                    self?.icon.append(image)
-                    print(image.description)
-                    self?.tableView.reloadData()
-                }
-            }
-        }
-    }
 
+
+    // アラート表示用メソッド　エラーの内容によって内容を変える  また、省略できるところはする
     func alert() {
         let dialog = UIAlertController(title: "エラー", message: "リトライしますか？", preferredStyle: .alert)
         //ボタンのタイトル
@@ -82,13 +72,17 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
         cell.titleLable.numberOfLines = 0
-        cell.titleLable.text = arry[indexPath.row].title
-        cell.updateDateLabel.text = arry[indexPath.row].updatedAt
+        let a = arry[indexPath.row]
+        cell.titleLable.text = a.title
+        cell.updateDateLabel.text = a.updatedAt
 
-//        cell.iconView.image = arry[indexPath.row].user.avaterURL
-        getImage(url: arry[indexPath.row].user.avaterURL)
-        // 画像の取得ができない
-        cell.iconView.image = icon.first
+
+        // 画像の取得
+        imageDownloderModel.downloadImage(urlString: "\(a.user.avaterURL)", success: { image in
+            DispatchQueue.main.async { [weak self] in
+                cell.iconView.image = image
+            }
+        })
         return cell
     }
 
