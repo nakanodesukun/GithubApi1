@@ -6,11 +6,12 @@
 //
 
 import Foundation
-//protocol IssueApiDelegate: AnyObject  {
-//    func fetchIssues(sucesse: [Issue])
-//}
 
-class ApiModel {
+
+class ApiViewModel {
+    enum urlString {
+        static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+    }
     // 副作用のあるメソッドなので動詞 Jsonに準拠させる　　　　　　　　　　　　　　　// どんなな型でも入れられる.
     func fetchData<T: Decodable>(urlString: String, sucesse: @escaping (T) -> (), failure: @escaping () -> ()) {
         guard let url = URL(string: urlString) else { return }  // completionHandler内ではDelegateが使えない

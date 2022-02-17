@@ -5,9 +5,7 @@
 //  Created by 中野翔太 on 2022/02/16.
 //
 
-import Foundation
 import UIKit
-
 
 class ImageDownloderModel {
     func downloadImage(url: URL, success: @escaping(UIImage) -> Void) {

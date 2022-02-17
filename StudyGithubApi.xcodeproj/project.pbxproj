@@ -53,8 +53,6 @@
 			isa = PBXGroup;
 			children = (
 				950399DF27B8F75600943D2C /* UserModel.swift */,
-				950399E127B8F86800943D2C /* ApiModel.swift */,
-				95039A2F27BCCBD100943D2C /* ImageDownloderModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -62,6 +60,9 @@
 		950399DD27B8F6E500943D2C /* View */ = {
 			isa = PBXGroup;
 			children = (
+				950BF6B127B3A6CC00BA8ED9 /* ViewController.swift */,
+				950399E527BB4BC000943D2C /* DetailViewController.swift */,
+				950BF6C127B3A88A00BA8ED9 /* CustomCell.swift */,
 				950BF6B327B3A6CC00BA8ED9 /* Main.storyboard */,
 			);
 			path = View;
@@ -70,19 +71,11 @@
 		950399DE27B8F6F200943D2C /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
+				950399E127B8F86800943D2C /* ApiModel.swift */,
+				95039A2F27BCCBD100943D2C /* ImageDownloderModel.swift */,
 				950399E727BB724500943D2C /* UserListViewModel.swift */,
 			);
 			path = ViewModel;
-			sourceTree = "<group>";
-		};
-		950399E427B8F97100943D2C /* ViewController */ = {
-			isa = PBXGroup;
-			children = (
-				950BF6B127B3A6CC00BA8ED9 /* ViewController.swift */,
-				950399E527BB4BC000943D2C /* DetailViewController.swift */,
-				950BF6C127B3A88A00BA8ED9 /* CustomCell.swift */,
-			);
-			path = ViewController;
 			sourceTree = "<group>";
 		};
 		950BF6A127B3A6CC00BA8ED9 = {
@@ -107,7 +100,6 @@
 				950399DC27B8F6DB00943D2C /* Model */,
 				950399DD27B8F6E500943D2C /* View */,
 				950399DE27B8F6F200943D2C /* ViewModel */,
-				950399E427B8F97100943D2C /* ViewController */,
 				950BF6AD27B3A6CC00BA8ED9 /* AppDelegate.swift */,
 				950BF6AF27B3A6CC00BA8ED9 /* SceneDelegate.swift */,
 				950BF6B627B3A6CD00BA8ED9 /* Assets.xcassets */,

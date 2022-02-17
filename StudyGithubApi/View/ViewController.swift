@@ -21,7 +21,7 @@ class ViewController: UIViewController {
 
 //    var avaterUrlArray = [Issue]()
     var avaterUrlArray = [UIImage]()
-    let apiModel = ApiModel()
+    let apiViewModel = ApiViewModel()
     let imageDownloderModel = ImageDownloderModel()
 
 
@@ -36,7 +36,7 @@ class ViewController: UIViewController {
     }
     // JsonでDecode　　　// urlを取得する引数を作る
     func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
-        apiModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
+        apiViewModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
             DispatchQueue.main.async { [weak self] in
                 self?.arry = issue
                 self?.tableView.reloadData()
