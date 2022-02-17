@@ -47,7 +47,6 @@ class ViewController: UIViewController {
             }
         }
     }
-    // 画像を表示
 
 
 
@@ -72,17 +71,15 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
         cell.titleLable.numberOfLines = 0
-        let a = arry[indexPath.row]
-        cell.titleLable.text = a.title
-        cell.updateDateLabel.text = a.updatedAt
+        cell.configure(item: arry[indexPath.row])
 
-
-        // 画像の取得
-        imageDownloderModel.downloadImage(urlString: "\(a.user.avaterURL)", success: { image in
+        // 画像の取得/表示
+        imageDownloderModel.downloadImage(url: arry[indexPath.row].user.avaterURL, success: { image in
             DispatchQueue.main.async { [weak self] in
                 cell.iconView.image = image
             }
         })
+
         return cell
     }
 
