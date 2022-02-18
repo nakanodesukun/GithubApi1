@@ -14,11 +14,11 @@ class DetailViewController: UIViewController, SFSafariViewControllerDelegate {
     @IBOutlet weak var didTapUrllabel: UIButton!
 
 //    var title: String?
-    var detail:[Issue] = []
-    var issue: Issue?
     var selectedText: Issue!
+
     override func viewDidLoad() {
         super.viewDidLoad()
+
 //        detail.forEach({print($0.body)})
         titleLabel.text = selectedText.title
         bodyLabel.text = selectedText.body
