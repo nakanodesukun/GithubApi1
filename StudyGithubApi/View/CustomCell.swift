@@ -8,7 +8,7 @@
 import UIKit
 
 class CustomCell: UITableViewCell {
-    // xibに変更する。明日は、xibを練習して実装してみる
+    
     @IBOutlet weak var titleLable: UILabel!
     @IBOutlet weak var updateDateLabel: UILabel!
     @IBOutlet weak var iconView: UIImageView!

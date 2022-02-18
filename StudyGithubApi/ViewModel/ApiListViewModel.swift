@@ -5,9 +5,12 @@
 //  Created by 中野翔太 on 2022/02/15.
 //
 
-import UIKit
+import Foundation
+
 class ApiListViewModel {
+    
     let apiModel = ApiModel()
+
     enum urlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
         static let FoldingMemoAppUrl = "https://api.github.com/repos/app-dojo-salon/FoldingMemoApp/issues"

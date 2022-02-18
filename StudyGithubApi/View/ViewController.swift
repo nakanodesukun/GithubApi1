@@ -54,9 +54,11 @@ class ViewController: UIViewController {
 
     }
 
+    
     @IBAction func exit(segue:UIStoryboardSegue)  {
 
     }
+
     // アラート表示用メソッド　エラーの内容によって内容を変える  また、省略できるところはする
     func alert(title: String, message: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
@@ -97,6 +99,7 @@ extension ViewController: UITableViewDelegate {
              tableView.deselectRow(at: indexPath, animated: true)
         // 詳細画面に特定のデータを渡す
         selectedText = IssueArry[indexPath.row]
+
         tableView.deselectRow(at: indexPath, animated: true)
         // 画面遷移
         performSegue(withIdentifier: "showDetails", sender: self)
