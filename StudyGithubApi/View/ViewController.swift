@@ -16,37 +16,59 @@ class ViewController: UIViewController {
     //　アイコン取得
     var icon = [UIImage]()
 
+    let userListModel = UserListModel()
     // 値を渡すグローバル変数
     var selectedText: Issue?
 
 //    var avaterUrlArray = [Issue]()
     var avaterUrlArray = [UIImage]()
-    let apiViewModel = ApiViewModel()
+    let apiViewModel = ApiModel()
     let imageDownloderModel = ImageDownloderModel()
 
 
     @IBOutlet weak var tableView: UITableView!
     override func viewDidLoad() {
         super.viewDidLoad()
-        getUer()
+//        getUer()
+        userListModel.getApi()
+        NotificationCenter.default.addObserver(self, selector:  #selector(getApi), name: Notification.Name("notifyName"), object: nil)
 
     }
+    // NotificationでViewModelから通知を受け取る
+    @objc func getApi(notification: Notification) {
+        guard let api = notification.object as? [Issue] else {
+            print("エラー")
+            return
+        }
+//        arry = api
+        print(api)
+        arry = api
+        DispatchQueue.main.async {
+//            print(api)
+//            print("成功しました")
+            self.arry = api
+            self.tableView.reloadData()
+        }
+
+    }
+    
+
     @IBAction func exit(segue:UIStoryboardSegue)  {
 
     }
-    // JsonでDecode　　　// urlを取得する引数を作る
-    func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
-        apiViewModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
-            DispatchQueue.main.async { [weak self] in
-                self?.arry = issue
-                self?.tableView.reloadData()
-            }
-        } failure: {
-            DispatchQueue.main.async {
-                self.alert()
-            }
-        }
-    }
+//    // JsonでDecode　　　// urlを取得する引数を作る
+//    func getUer() {                                                                                  // ここで具体的に欲しい値を取得する
+//        apiViewModel.fetchData(urlString: "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues") { (issue: [Issue]) in
+//            DispatchQueue.main.async { [weak self] in
+//                self?.arry = issue
+//                self?.tableView.reloadData()
+//            }
+//        } failure: {
+//            DispatchQueue.main.async {
+//                self.alert()
+//            }
+//        }
+//    }
 
 
 

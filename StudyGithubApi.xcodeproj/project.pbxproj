@@ -53,6 +53,8 @@
 			isa = PBXGroup;
 			children = (
 				950399DF27B8F75600943D2C /* UserModel.swift */,
+				950399E127B8F86800943D2C /* ApiModel.swift */,
+				95039A2F27BCCBD100943D2C /* ImageDownloderModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -71,8 +73,6 @@
 		950399DE27B8F6F200943D2C /* ViewModel */ = {
 			isa = PBXGroup;
 			children = (
-				950399E127B8F86800943D2C /* ApiModel.swift */,
-				95039A2F27BCCBD100943D2C /* ImageDownloderModel.swift */,
 				950399E727BB724500943D2C /* UserListViewModel.swift */,
 			);
 			path = ViewModel;
