@@ -8,6 +8,7 @@
 import UIKit
 
 class ImageDownloderModel {
+
     func downloadImage(url: URL, success: @escaping(UIImage) -> Void) {
         // do-catch文にリファクタリングする // 通信中にインジーケータを表示する。
         var urlRequest = URLRequest(url: url)

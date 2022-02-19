@@ -9,12 +9,13 @@ import UIKit
 
 class CustomCell: UITableViewCell {
     
-    @IBOutlet weak var titleLable: UILabel!
-    @IBOutlet weak var updateDateLabel: UILabel!
+    @IBOutlet private weak var titleLable: UILabel!
+    @IBOutlet private weak var updateDateLabel: UILabel!
     @IBOutlet weak var iconView: UIImageView!
     // 処理
     func configure(item: Issue) {
         titleLable.text = item.title
         updateDateLabel.text = item.updatedAt
     }
+
 }
