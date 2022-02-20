@@ -40,6 +40,7 @@ class ApiModel {
             }
         }
     }
+    
                                                         //  Result<Sucess, Failure>型でエラー処理
     func fetchData(urlString: String, completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
         guard let url = URL(string: urlString) else {
@@ -57,13 +58,13 @@ class ApiModel {
                 return
             }
             do {
-                                                        // ジェネリクスを用いることで型の変換を関数内部で変更しなくて済む。
                 let issueDecode = try JSONDecoder().decode([Issue].self, from: data)
-
                 // 現在サブスレッドなのでメインスレッドへ
-                DispatchQueue.main.async {
+                DispatchQueue.main.async { [weak self] in
                     completionHandler(.success(issueDecode))
 //                    print(issueDecode.filter({$0.title as? String}))
+                    issueDecode.forEach{print($0.user.avaterURL)}
+
                 }
             } catch  {
                 completionHandler(.failure(.networkError))

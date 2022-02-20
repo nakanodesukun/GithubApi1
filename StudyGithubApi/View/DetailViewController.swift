@@ -18,7 +18,7 @@ class DetailViewController: UIViewController, SFSafariViewControllerDelegate {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        
 //        detail.forEach({print($0.body)})
         titleLabel.text = selectedText?.title
         bodyLabel.text = selectedText?.body

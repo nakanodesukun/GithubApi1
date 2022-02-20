@@ -4,50 +4,50 @@
 //
 //  Created by 中野翔太 on 2022/02/09.
 //
-
 import UIKit
 
-// ViewControllerに記述が多すぎる。NotificationCenterを使ってViewcontorllerの記述を減らせる？？
-
+// ViewControllerに記述が多すぎる。NotificationCenterを使ってViewcontorllerへの
 class ViewController: UIViewController {
 
-    let apiListModel = ApiListViewModel()
+    let apiViewModel = ApiViewModel()
 
     let imageDownloderModel = ImageDownloderModel()
     // 値を格納(TableView表示用)
     var IssueArry:[Issue] = []
-    // 値を渡すグローバル変数
+    // TableViewが選択されたときに次の画面へ値を渡すグローバル変数
     var selectedText: Issue?
+    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
 
     @IBOutlet private weak var tableView: UITableView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        activityIndicatorView.startAnimating()
+
         // 画面が表示されるタイミングで発火させる
-        apiListModel.getApi()
-        // ViewModelから通知を受け取る  　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　// タイプミスがあるので定数で保持するように変更
+        apiViewModel.getApi()
+        // ApiViewModelから通知を受け取る  　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　// タイプミスがあるので定数で保持するように変更
         NotificationCenter.default.addObserver(self, selector:  #selector(getApi),
                                                name: Notification.Name("notifyName"),
                                                object: nil)
-        // ViewModelからエラー通知を受け取る                                                            　// タイプミスがあるので定数で保持するように変更
+        // ApiViewModelからエラー通知を受け取る                                                            　// タイプミスがあるので定数で保持するように変更
         NotificationCenter.default.addObserver(self, selector: #selector(getApierror),
                                                name: Notification.Name("notificationError"),
                                                object: nil)
     }
-    // ViewModelから通知を受け取る
+    // ApiViewModelから通知を受け取る
     @objc func getApi(notification: Notification) {
         guard let api = notification.object as? [Issue] else {
-            print("Notification型から[Issue]型の変換に失敗")
-            //            self.alert(title: "エラー", message: "通信に失敗しました")
             return
-        }
-        IssueArry = api
+        }   // UIの更新
         DispatchQueue.main.async { [weak self] in
-            self?.IssueArry = api
 
+            self?.activityIndicatorView.stopAnimating()    // アニメーション終了
+            self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
+            self?.IssueArry = api
             self?.tableView.reloadData()
-            print( )
         }
+
     }
     // ViewModelからerror通知を受け取る
     @objc func getApierror(notification: Notification) {
@@ -55,11 +55,12 @@ class ViewController: UIViewController {
         guard let alert = notification.object as? UIAlertController else {
             return
         }
-
+           // 処理の終了を待ってから実行     // 弱参照にしておく
         DispatchQueue.main.async { [weak self] in
             self?.present(alert,
                           animated: true,
                           completion: nil)
+            self?.tableView.reloadData()
         }
     }
     @IBAction func exit(segue:UIStoryboardSegue)  {
@@ -67,9 +68,9 @@ class ViewController: UIViewController {
     }
 }
 
-
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        
         return IssueArry.count
     }
 
@@ -91,14 +92,13 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // セルの選択を解除
         tableView.deselectRow(at: indexPath, animated: true)
-        // 詳細画面に特定のデータを渡す
+        // 詳細画面に特定のデータを渡す       // delegateでなくnotificationCenterを使って値を渡す方がいい？？
         selectedText = IssueArry[indexPath.row]
-
-        tableView.deselectRow(at: indexPath, animated: true)
         // 画面遷移
         performSegue(withIdentifier: "showDetails", sender: self)
 
     }
+
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "showDetails" {
