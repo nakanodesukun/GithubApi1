@@ -7,7 +7,7 @@
 
 import UIKit
 
-class ImageDownloderModel {
+class ImageDownlodeViewModel {
     func downloadImage(url: URL, success: @escaping (UIImage) -> Void) {
         // do-catch文にリファクタリングする 
         var urlRequest = URLRequest(url: url)

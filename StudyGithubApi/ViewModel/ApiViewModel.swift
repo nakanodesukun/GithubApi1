@@ -27,11 +27,21 @@ class ApiViewModel {
             // 成功と失敗の処理を分岐させ、結果をNotificationCenterでViewContorllerに渡す
             switch result {
             case .success(let issue):
+//                issue.forEach{print($0.updatedAt)}
+
                                                     // インジケータを表示させるため処理遅延させる
                 DispatchQueue.global().asyncAfter(deadline: .now() + 1) {
+                    // 時刻の変換
+                        issue.forEach { time in
+                        let date =  self.dateFromString(string: time.updatedAt)
+                        let dateString = self.stringFromDate(date: date)
+                            // ViewcontorllerへnotificationCenterを使って値を渡す
+                        NotificationCenter.default.post(name: Notification.Name("notifyNameDate"), object: dateString)
+                    }
                     // NotificationCenterでViewControllerへ値を渡す                           // 値を渡す
                     NotificationCenter.default.post(name:  Notification.Name("notifyName"),object: issue)
                 }
+
             case .failure(let error):
                 let errorTitle = error.title
                 let errorMessage = error.message
@@ -47,6 +57,21 @@ class ApiViewModel {
                 NotificationCenter.default.post(name:  Notification.Name("notificationError"), object: alert)
             }
         }
+    }
+
+    // UpdateAtをString型で取得しているのでDate型に変換する
+    func dateFromString(string: String) -> Date {
+            let formatter: DateFormatter = DateFormatter()
+            formatter.calendar = Calendar(identifier: .gregorian)
+            formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+            return formatter.date(from: string)!
+        }
+    // Data型の値をString型に再変換し
+    func stringFromDate(date: Date) -> String {
+            let formatter: DateFormatter = DateFormatter()
+            formatter.calendar = Calendar(identifier: .gregorian)
+            formatter.dateFormat = "yyyy年MM月dd日HH時mm分"
+            return formatter.string(from: date)
     }
 }
 

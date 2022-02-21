@@ -9,14 +9,17 @@ import UIKit
 // ViewControllerに記述が多すぎる。NotificationCenterを使ってViewcontorllerへの
 class ViewController: UIViewController {
 
-    let apiViewModel = ApiViewModel()
+  private let apiViewModel = ApiViewModel()
 
-    let imageDownloderModel = ImageDownloderModel()
+   private let imageDownloderModel = ImageDownlodeViewModel()
     // 値を格納(TableView表示用)
-    var IssueArry:[Issue] = []
+   private var IssueArry:[Issue] = []
+    //　ApiViewModelから時刻の表示を受けとる
+  private  var dateString: String = ""
+
     // TableViewが選択されたときに次の画面へ値を渡すグローバル変数
-    var selectedText: Issue?
-    @IBOutlet weak var activityIndicatorView: UIActivityIndicatorView!
+   private var selectedText: Issue?
+    @IBOutlet private weak var activityIndicatorView: UIActivityIndicatorView!
 
     @IBOutlet private weak var tableView: UITableView!
 
@@ -31,10 +34,24 @@ class ViewController: UIViewController {
         NotificationCenter.default.addObserver(self, selector:  #selector(getApi),
                                                name: Notification.Name("notifyName"),
                                                object: nil)
+
+        NotificationCenter.default.addObserver(self, selector:  #selector(getDate),
+                                               name: Notification.Name("notifyNameDate"),
+                                               object: nil)
         // ApiViewModelからエラー通知を受け取る                                                            　// タイプミスがあるので定数で保持するように変更
         NotificationCenter.default.addObserver(self, selector: #selector(getApierror),
                                                name: Notification.Name("notificationError"),
                                                object: nil)
+    }
+    @objc func getDate(notification: Notification) {
+        guard let dateString = notification.object as? String else {
+            return
+        }
+        DispatchQueue.main.async {
+            self.dateString = dateString
+            print(self.dateString)
+        }
+
     }
     // ApiViewModelから通知を受け取る
     @objc func getApi(notification: Notification) {
@@ -55,7 +72,7 @@ class ViewController: UIViewController {
         guard let alert = notification.object as? UIAlertController else {
             return
         }
-           // 処理の終了を待ってから実行     // 循環参照を避ける
+           // UIの更新                   // 循環参照を避ける
         DispatchQueue.main.async { [weak self] in
             self?.present(alert,
                           animated: true,
@@ -63,9 +80,9 @@ class ViewController: UIViewController {
             self?.tableView.reloadData()
         }
     }
+
     @IBAction func exit(segue:UIStoryboardSegue)  {
     }
-
 }
 
 extension ViewController: UITableViewDataSource {
@@ -75,11 +92,11 @@ extension ViewController: UITableViewDataSource {
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
-        cell.configure(item: IssueArry[indexPath.row])
+        cell.configure(item: IssueArry[indexPath.row], updateAt: dateString)
         
         // 画像の取得/表示  // クロージャーでそのままImageDownLoderModelから取得
         imageDownloderModel.downloadImage(url: IssueArry[indexPath.row].user.avaterURL,
-                                          success: { image in
+                                          success: { [weak self]  image in
             DispatchQueue.main.async { [weak self] in
                 cell.iconView.image = image
             }
@@ -93,13 +110,9 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         // 詳細画面に特定のデータを渡す       // delegateでなくnotificationCenterを使って値を渡す方がいい？？
         selectedText = IssueArry[indexPath.row]
-        
         // 画面遷移
         performSegue(withIdentifier: "DetailViewController", sender: self)
-
     }
-
-
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "DetailViewController" {
             let nav = segue.destination as! UINavigationController

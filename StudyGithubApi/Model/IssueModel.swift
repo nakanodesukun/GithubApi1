@@ -12,7 +12,7 @@ struct Issue: Codable  {
     let title: String // 一覧画面・詳細画面に表示
     let body: String // 詳細画面に表示
     let url: URL // 詳細画面に表示し、それをタップしたらSafariViewControllerで開く
-    let updatedAt: String // 一覧画面・詳細画面に表示   // codingkeyが必要！！ここstring?に変更stringで取得してformattoする？？
+    let updatedAt: String // 一覧画面・詳細画面に表示 // DateがただとエラーになるのでString型に変更
     let user: User // 一覧画面にアバター画像と名前を表示
 
     enum CodingKeys: String, CodingKey {
