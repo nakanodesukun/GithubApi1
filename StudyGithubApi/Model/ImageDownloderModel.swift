@@ -8,9 +8,8 @@
 import UIKit
 
 class ImageDownloderModel {
-
     func downloadImage(url: URL, success: @escaping (UIImage) -> Void) {
-        // do-catch文にリファクタリングする // 通信中にインジーケータを表示する。
+        // do-catch文にリファクタリングする 
         var urlRequest = URLRequest(url: url)
         urlRequest.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
@@ -26,7 +25,8 @@ class ImageDownloderModel {
             guard let imageData = UIImage(data: data) else {
                 print("型の変換に失敗しました")
                 return
-            } // 成功したらUIImage型のデータを渡す。
+            }
+            // 成功したらUIImage型のデータを渡す。
             success(imageData)
         }
         task.resume()

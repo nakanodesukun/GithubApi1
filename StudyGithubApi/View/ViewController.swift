@@ -22,9 +22,10 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        // インジケータの表示開始
         activityIndicatorView.startAnimating()
 
-        // 画面が表示されるタイミングで発火させる
+        // 画面が表示されるタイミングで発動
         apiViewModel.getApi()
         // ApiViewModelから通知を受け取る  　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　// タイプミスがあるので定数で保持するように変更
         NotificationCenter.default.addObserver(self, selector:  #selector(getApi),
@@ -39,9 +40,8 @@ class ViewController: UIViewController {
     @objc func getApi(notification: Notification) {
         guard let api = notification.object as? [Issue] else {
             return
-        }   // UIの更新
+        }   // UIの更新                    //　循環参照を避ける
         DispatchQueue.main.async { [weak self] in
-
             self?.activityIndicatorView.stopAnimating()    // アニメーション終了
             self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
             self?.IssueArry = api
@@ -55,7 +55,7 @@ class ViewController: UIViewController {
         guard let alert = notification.object as? UIAlertController else {
             return
         }
-           // 処理の終了を待ってから実行     // 弱参照にしておく
+           // 処理の終了を待ってから実行     // 循環参照を避ける
         DispatchQueue.main.async { [weak self] in
             self?.present(alert,
                           animated: true,
@@ -64,13 +64,12 @@ class ViewController: UIViewController {
         }
     }
     @IBAction func exit(segue:UIStoryboardSegue)  {
-        
     }
+
 }
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         return IssueArry.count
     }
 
@@ -94,14 +93,15 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         // 詳細画面に特定のデータを渡す       // delegateでなくnotificationCenterを使って値を渡す方がいい？？
         selectedText = IssueArry[indexPath.row]
+        
         // 画面遷移
-        performSegue(withIdentifier: "showDetails", sender: self)
+        performSegue(withIdentifier: "DetailViewController", sender: self)
 
     }
 
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showDetails" {
+        if segue.identifier == "DetailViewController" {
             let nav = segue.destination as! UINavigationController
             let detaileViewController = nav.topViewController as! DetailViewController
             detaileViewController.selectedText = selectedText

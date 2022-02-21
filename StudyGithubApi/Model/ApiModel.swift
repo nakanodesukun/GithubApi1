@@ -40,7 +40,6 @@ class ApiModel {
             }
         }
     }
-    
                                                         //  Result<Sucess, Failure>型でエラー処理
     func fetchData(urlString: String, completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
         guard let url = URL(string: urlString) else {
@@ -60,12 +59,10 @@ class ApiModel {
             do {
                 let issueDecode = try JSONDecoder().decode([Issue].self, from: data)
                 // 現在サブスレッドなのでメインスレッドへ
-                DispatchQueue.main.async { [weak self] in
                     completionHandler(.success(issueDecode))
-//                    print(issueDecode.filter({$0.title as? String}))
-                    issueDecode.forEach{print($0.user.avaterURL)}
+//                    issueDecode.forEach{print($0.user.avaterURL)}
 
-                }
+                
             } catch  {
                 completionHandler(.failure(.networkError))
 //                print("deocdeに失敗", error)
