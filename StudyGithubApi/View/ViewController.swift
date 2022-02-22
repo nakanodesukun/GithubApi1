@@ -14,7 +14,7 @@ final class ViewController: UIViewController {
     private let imageDownloderModel = ImageDownlodeViewModel()
     
     // Notificationから取得した値を保持する(TableView表示用)
-    private var IssueArry:[Issue] = []
+    private var issueItems:[Issue] = []
     //　ApiViewModelから時刻の表示を受けとる
     private var dateString: String = ""
     
@@ -56,7 +56,7 @@ final class ViewController: UIViewController {
         DispatchQueue.main.async { [weak self] in
             self?.activityIndicatorView.stopAnimating()    // アニメーション終了
             self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
-            self?.IssueArry = api // TableViewに表示するためグローバル変数に格納
+            self?.issueItems = api // TableViewに表示するためグローバル変数に格納
             self?.tableView.reloadData()
         }
     }
@@ -89,15 +89,15 @@ final class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        IssueArry.count
+        issueItems.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
-        cell.configure(item: IssueArry[indexPath.row], updateAt: dateString)
+        cell.configure(item: issueItems[indexPath.row], updateAt: dateString)
         
         // 画像の取得/表示  // クロージャーでそのままImageDownLoderModelから取得
-        imageDownloderModel.downloadImage(url: IssueArry[indexPath.row].user.avaterURL,
+        imageDownloderModel.downloadImage(url: issueItems[indexPath.row].user.avaterURL,
                                           success: { [weak self]  image in
             DispatchQueue.main.async { [weak self] in
                 cell.iconView.image = image
@@ -110,7 +110,7 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         
         // 詳細画面に特定のデータを渡す
-        selectedText = IssueArry[indexPath.row]
+        selectedText = issueItems[indexPath.row]
         // 画面遷移
         performSegue(withIdentifier: detailViewController, sender: nil)
         // セルの選択を解除
@@ -124,6 +124,10 @@ extension ViewController: UITableViewDelegate {
                   let detailViewcontroller = navigationCentroller.topViewController as? DetailViewController else {
                       return
                   }
+            guard let selectedText = selectedText else {
+                return
+            }
+
             // 次の画面への値渡し
             detailViewcontroller.selectedText = selectedText
             detailViewcontroller.dateText = dateString
