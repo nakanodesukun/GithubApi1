@@ -12,6 +12,7 @@ class ViewController: UIViewController {
     private let apiViewModel = ApiViewModel()
 
     private let imageDownloderModel = ImageDownlodeViewModel()
+    
     // ApiViewModelから取得した値を保持する(TableView表示用)
     private var IssueArry:[Issue] = []
     //　ApiViewModelから時刻の表示を受けとる
@@ -30,30 +31,22 @@ class ViewController: UIViewController {
 
         // 画面が表示されるタイミングで発動
         apiViewModel.getApi()
-        // ApiViewModelから通知を受け取る  　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　// タイプミスがあるので定数で保持するように変更
-        NotificationCenter.default.addObserver(self, selector:  #selector(getApi),
-                                               name: Notification.Name("notifyName"),
+        // ApiViewModelから通知を受け取る                   delegateを使えば記述を減らせ可読性が上がる。しかし、N対Nの処理をしたい時を想定するとNotificationを使うべき??
+        NotificationCenter.default.addObserver(self, selector:  #selector(getIssue),
+                                               name: .notifyIssue,
                                                object: nil)
 
         NotificationCenter.default.addObserver(self, selector:  #selector(getDate),
-                                               name: Notification.Name("notifyNameDate"),
+                                               name: .nofityDate,
                                                object: nil)
-        // ApiViewModelからエラー通知を受け取る                                                            　// タイプミスがあるので定数で保持するように変更
-        NotificationCenter.default.addObserver(self, selector: #selector(getApierror),
-                                               name: Notification.Name("notificationError"),
+        // ApiViewModelからエラー通知を受け取る
+        NotificationCenter.default.addObserver(self, selector: #selector(getApiError),
+                                               name: .notifyError,
                                                object: nil)
     }
-    // Dat
-    @objc func getDate(notification: Notification) {
-        guard let dateString = notification.object as? String else { // Notification型なので型の変換を行う
-            return
-        }
-        DispatchQueue.main.async { [weak self] in
-            self?.dateString = dateString
-        }
-    }
+
     // ApiViewModelから通知を受け取る
-    @objc func getApi(notification: Notification) {
+    @objc func getIssue(notification: Notification) {
         guard let api = notification.object as? [Issue] else {
             return
         }   // UIの更新                    //　循環参照を避ける
@@ -64,8 +57,17 @@ class ViewController: UIViewController {
             self?.tableView.reloadData()
         }
     }
+    // ApiViewModel通知を受け取る
+    @objc func getDate(notification: Notification) {
+        guard let dateString = notification.object as? String else { // Notification型なので型の変換を行う
+            return
+        }
+        DispatchQueue.main.async { [weak self] in
+            self?.dateString = dateString
+        }
+    }
     // ViewModelからerror通知を受け取る
-    @objc func getApierror(notification: Notification) {
+    @objc func getApiError(notification: Notification) {
         // Notification型からUIAlertController型に変換
         guard let alert = notification.object as? UIAlertController else {
             return
@@ -78,7 +80,6 @@ class ViewController: UIViewController {
             self?.tableView.reloadData()
         }
     }
-
     @IBAction func exit(segue:UIStoryboardSegue)  {
     }
 }
@@ -106,9 +107,9 @@ extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // セルの選択を解除
         tableView.deselectRow(at: indexPath, animated: true)
-        // 詳細画面に特定のデータを渡す       // delegateでなくnotificationCenterを使って値を渡す方がいい？？
+        // 詳細画面に特定のデータを渡す
         selectedText = IssueArry[indexPath.row]
-        NotificationCenter.default
+        NotificationCenter.default.post(name: .notifySelectedText, object: selectedText)
         // 画面遷移
         performSegue(withIdentifier: "DetailViewController", sender: self)
     }
@@ -121,6 +122,7 @@ extension ViewController: UITableViewDelegate {
                       return
                   }
             detailViewcontroller.selectedText = selectedText
+            detailViewcontroller.dateText = dateString
         default:
             break
         }
