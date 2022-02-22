@@ -9,22 +9,23 @@ import Foundation
 
 struct Issue: Codable  {
     let number: Int
-    let title: String // 一覧画面・詳細画面に表示
-    let body: String // 詳細画面に表示
-    let url: URL // 詳細画面に表示し、それをタップしたらSafariViewControllerで開く
-    let updatedAt: String // 一覧画面・詳細画面に表示 // DateがただとエラーになるのでString型に変更
-    let user: User // 一覧画面にアバター画像と名前を表示
-
+    let title: String
+    let body: String
+    let url: URL
+    let updatedAt: String
+    let user: User
+    
     enum CodingKeys: String, CodingKey {
         case number, title, body, url, user
         case updatedAt = "updated_at"
     }
 }
+
 struct User: Codable {
     let login: String // ユーザー名
     let avaterURL: URL
     enum CodingKeys: String, CodingKey {
         case login
-        case avaterURL = "avatar_url"    //   URLが取得されるので対処必要
+        case avaterURL = "avatar_url"
     }
 }

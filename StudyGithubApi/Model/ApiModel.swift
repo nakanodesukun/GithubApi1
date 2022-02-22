@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 
-class ApiModel {
-                     // Error準拠させる。(Result<Sucess, Failure>型でエラー処理を行いたいため)
+ final class ApiModel {
+    // Error準拠させる。(Result<Sucess, Failure>型でエラー処理を行いたいため)
     enum ApiError: Error {
         case invalidURL
         case networkError
@@ -40,33 +40,27 @@ class ApiModel {
             }
         }
     }
-                                                        //  Result<Sucess, Failure>型でエラー処理
-    func fetchData(urlString: String, completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
+    //  Result<Sucess, Failure>型でエラー処理
+    func fetchData(urlString: String,
+                   completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
         guard let url = URL(string: urlString) else {
+            //
             completionHandler(.failure(.invalidURL))
             return
         }
         var request = URLRequest(url: url)
-               request.httpMethod = "GET"
+        request.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                print("error", error.localizedDescription)
-            }
-            guard let data = data else {
-                print("dataの取得に失敗しました")
-                return
-            }
+            // guard let文は安全にプログラムを進めれるが,ユーザー目線で考えるとエラーの表示内容は限られるのでdo-catch文を使った。
             do {
-                let issueDecode = try JSONDecoder().decode([Issue].self, from: data)
-                // 現在サブスレッドなのでメインスレッドへ
-                    completionHandler(.success(issueDecode))
-//                    issueDecode.forEach{print($0.user.avaterURL)}
-
-                
+                let error = try error
+                let data = try data
+                let issueDecode = try JSONDecoder().decode([Issue].self, from: data!)
+                // クロージャーでApiViewModelに成功した時の値を渡す。
+                completionHandler(.success(issueDecode))
             } catch  {
+                // クロージャーでApiViewModelに失敗した値を渡す。
                 completionHandler(.failure(.networkError))
-//                print("deocdeに失敗", error)
-
             }
         }
         task.resume()

@@ -7,9 +7,12 @@
 
 import Foundation
 extension Notification.Name {
+    
     static let notifyIssue = Notification.Name("notifyIssue")
+
     static let nofityDate = Notification.Name("notifyDate")
+
     static let notifyError = Notification.Name("notifyError")
-    static let notifySelectedText = Notification.Name("notifySelectedText")
+
 }
 
