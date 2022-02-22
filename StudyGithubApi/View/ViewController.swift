@@ -6,7 +6,6 @@
 //
 import UIKit
 
-// ViewControllerに記述が多すぎる。NotificationCenterを使ってViewcontorllerへの
 final class ViewController: UIViewController {
     
     private let apiViewModel = ApiViewModel()
