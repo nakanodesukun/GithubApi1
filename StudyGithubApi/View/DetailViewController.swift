@@ -22,11 +22,13 @@ class DetailViewController: UIViewController {
         bodyLabel.text = selectedText?.body
         didTapUrllabel.setTitle("\(selectedText?.url)", for: .normal)
     }
+
     @IBAction func didTapUrlButton(_ sender: Any) {
-        //  gurd文などを使う
-        let url = selectedText?.url
-        let safariVc = SFSafariViewController(url: url!)
+        guard let url = selectedText?.url else {
+            return
+        }
+        let safariVc = SFSafariViewController(url: url)
          present(safariVc, animated: true, completion: nil)
         }
-    }
+}
 

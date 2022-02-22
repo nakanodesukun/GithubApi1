@@ -19,11 +19,11 @@ class ApiViewModel {
         static let FoldingMemoAppUrl = "https://api.github.com/repos/app-dojo-salon/FoldingMemoApp/issues"
     }
     
-    let apiModel = ApiModel()
+  private  let apiModel = ApiModel()
 
 
     func getApi() {
-        apiModel.fetchData(urlString: urlString.TodoAppUrl) { result in
+        apiModel.fetchData(urlString: urlString.FoldingMemoAppUrl) { result in
             // 成功と失敗の処理を分岐させ、結果をNotificationCenterでViewContorllerに渡す
             switch result {
             case .success(let issue):
@@ -60,14 +60,14 @@ class ApiViewModel {
     }
 
     // UpdateAtをString型で取得しているのでDate型に変換する
-    func dateFromString(string: String) -> Date {
+   private func dateFromString(string: String) -> Date {
             let formatter: DateFormatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
             formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
             return formatter.date(from: string)!
         }
     // Data型の値をString型に再変換し
-    func stringFromDate(date: Date) -> String {
+   private func stringFromDate(date: Date) -> String {
             let formatter: DateFormatter = DateFormatter()
             formatter.calendar = Calendar(identifier: .gregorian)
             formatter.dateFormat = "yyyy年MM月dd日HH時mm分"

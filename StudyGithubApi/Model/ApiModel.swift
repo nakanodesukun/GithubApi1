@@ -10,10 +10,10 @@ import UIKit
 
 
 class ApiModel {
-                     // Errorプロトコル
+                     // Error準拠させる。(Result<Sucess, Failure>型でエラー処理を行いたいため)
     enum ApiError: Error {
-        case invalidURL  // 無効なURLです
-        case networkError // 通信失敗
+        case invalidURL
+        case networkError
         
         var title: String {
             switch self {

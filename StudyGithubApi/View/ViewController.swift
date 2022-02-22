@@ -9,16 +9,16 @@ import UIKit
 // ViewControllerに記述が多すぎる。NotificationCenterを使ってViewcontorllerへの
 class ViewController: UIViewController {
 
-  private let apiViewModel = ApiViewModel()
+    private let apiViewModel = ApiViewModel()
 
-   private let imageDownloderModel = ImageDownlodeViewModel()
-    // 値を格納(TableView表示用)
-   private var IssueArry:[Issue] = []
+    private let imageDownloderModel = ImageDownlodeViewModel()
+    // ApiViewModelから取得した値を保持する(TableView表示用)
+    private var IssueArry:[Issue] = []
     //　ApiViewModelから時刻の表示を受けとる
-  private  var dateString: String = ""
+    private  var dateString: String = ""
 
     // TableViewが選択されたときに次の画面へ値を渡すグローバル変数
-   private var selectedText: Issue?
+    private var selectedText: Issue?
     @IBOutlet private weak var activityIndicatorView: UIActivityIndicatorView!
 
     @IBOutlet private weak var tableView: UITableView!
@@ -43,15 +43,14 @@ class ViewController: UIViewController {
                                                name: Notification.Name("notificationError"),
                                                object: nil)
     }
+    // Dat
     @objc func getDate(notification: Notification) {
-        guard let dateString = notification.object as? String else {
+        guard let dateString = notification.object as? String else { // Notification型なので型の変換を行う
             return
         }
-        DispatchQueue.main.async {
-            self.dateString = dateString
-            print(self.dateString)
+        DispatchQueue.main.async { [weak self] in
+            self?.dateString = dateString
         }
-
     }
     // ApiViewModelから通知を受け取る
     @objc func getApi(notification: Notification) {
@@ -64,7 +63,6 @@ class ViewController: UIViewController {
             self?.IssueArry = api
             self?.tableView.reloadData()
         }
-
     }
     // ViewModelからerror通知を受け取る
     @objc func getApierror(notification: Notification) {
@@ -72,7 +70,7 @@ class ViewController: UIViewController {
         guard let alert = notification.object as? UIAlertController else {
             return
         }
-           // UIの更新                   // 循環参照を避ける
+        // UIの更新                   // 循環参照を避ける
         DispatchQueue.main.async { [weak self] in
             self?.present(alert,
                           animated: true,
@@ -87,7 +85,7 @@ class ViewController: UIViewController {
 
 extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return IssueArry.count
+         IssueArry.count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -110,14 +108,21 @@ extension ViewController: UITableViewDelegate {
         tableView.deselectRow(at: indexPath, animated: true)
         // 詳細画面に特定のデータを渡す       // delegateでなくnotificationCenterを使って値を渡す方がいい？？
         selectedText = IssueArry[indexPath.row]
+        NotificationCenter.default
         // 画面遷移
         performSegue(withIdentifier: "DetailViewController", sender: self)
     }
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "DetailViewController" {
-            let nav = segue.destination as! UINavigationController
-            let detaileViewController = nav.topViewController as! DetailViewController
-            detaileViewController.selectedText = selectedText
+            // switch文にすることで汎用的になる
+        switch segue.identifier {
+        case "DetailViewController":
+            guard let navigationCentroller = segue.destination as? UINavigationController,
+                  let detailViewcontroller = navigationCentroller.topViewController as? DetailViewController else {
+                      return
+                  }
+            detailViewcontroller.selectedText = selectedText
+        default:
+            break
         }
     }
 }
