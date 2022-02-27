@@ -8,10 +8,11 @@
 import UIKit
 // Viewと依存関係にあると考えられるのでViewModelとした。
 
-final class ImageDownlodeViewModel {
-    func downloadImage(url: URL, success: @escaping (UIImage) -> Void) {
+final class ImageDownlodeModel {
+    func downloadImage(urlString: URL, success: @escaping (UIImage) -> Void) {
+//        guard let urlString = URL(string: urlString) else { return  }
         // do-catch文にリファクタリングする
-        var urlRequest = URLRequest(url: url)
+        var urlRequest = URLRequest(url: urlString)
         urlRequest.httpMethod = "GET"
         let task = URLSession.shared.dataTask(with: urlRequest) { data, response, error in
             // guard let文は安全にプログラムを進めれるが,ユーザー目線で考えるとエラーの表示内容は限られるのでdo-catch文を使った。

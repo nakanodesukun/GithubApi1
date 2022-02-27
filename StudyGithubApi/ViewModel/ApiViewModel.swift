@@ -13,7 +13,11 @@ import UIKit
  現状のスキルだとMVCやMVPアーキテクチャで書いた方が良い。しかし、変更してMVCやMVPで記述するとFatViewControllerになってしまう。
  */
 final class ApiViewModel {
-    private  let apiModel = ApiModel()
+
+    private let apiModel = ApiModel()
+//    private let imageViewModel = ImageViewModel()
+    
+    weak var delegate: IssueApiDelegate?
 
     enum urlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
@@ -24,17 +28,19 @@ final class ApiViewModel {
             // 成功と失敗の処理を分岐させ、結果をNotificationCenterでViewContorllerに渡す
             switch result {
             case .success(let issue):
+            
                 // インジケータを表示させるために処理遅延させる
                 DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
                     // 時刻の変換
                     issue.forEach { time in
-                        let date =  self?.dateFromString(string: time.updatedAt)
-                        let dateString = self?.stringFromDate(date: date!)
-                        // ViewcontorllerへnotificationCenterを使って値を渡す
-                        NotificationCenter.default.post(name: .nofityDate, object: dateString)
+                        guard let date =  self?.dateFromString(string: time.updatedAt) else { return }
+                        guard let dateString = self?.stringFromDate(date: date) else { return }
+                        self?.delegate?.fetchIssue(issue: issue, date: dateString)
+//                        ImageViewModel.init(issue: issue)
+                        ImageViewModel(issueUrl: time.user.avaterURL)
+                        
+                        print(time)
                     }
-                    // NotificationCenterでViewControllerへ値を渡す
-                    NotificationCenter.default.post(name: .notifyIssue,object: issue)
                 }
 
             case .failure(let error):

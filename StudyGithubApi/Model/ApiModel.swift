@@ -55,8 +55,10 @@ import UIKit
                 let error = try error
                 let data = try data
                 let issueDecode = try JSONDecoder().decode([Issue].self, from: data!)
-                // クロージャーでApiViewModelに成功した時の値を渡す。
+                // クロージャーでApiViewModelに成功した時の値を渡す。  // タプルの配列
                 completionHandler(.success(issueDecode))
+                // protocolを使ってImageViewModelに渡す
+//                print(issueDecode.map{$0.user.avaterURL})
             } catch  {
                 // クロージャーでApiViewModelに失敗した値を渡す。
                 completionHandler(.failure(.networkError))

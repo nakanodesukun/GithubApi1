@@ -17,6 +17,7 @@ final class DetailViewController: UIViewController{
     
     var selectedText: Issue! = nil
     var dateText: String?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         giveItem(item: selectedText, detaText: dateText ?? "")
