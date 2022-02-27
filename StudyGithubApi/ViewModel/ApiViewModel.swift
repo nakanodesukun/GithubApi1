@@ -8,10 +8,6 @@
 
 import UIKit
 
-/* MVVMを意識するとModelとViewは直接の依存関係を持ってはいけない。ViewModelはViewとModelの仲介役。
- ViewとViewModleのデータバインディングを行うには、CombineやRXSwiftを用いればMVVMらしくなると気付いた。
- 現状のスキルだとMVCやMVPアーキテクチャで書いた方が良い。しかし、変更してMVCやMVPで記述するとFatViewControllerになってしまう。
- */
 final class ApiViewModel {
 
     private let apiModel = ApiModel()
@@ -27,27 +23,22 @@ final class ApiViewModel {
         apiModel.fetchData(urlString: urlString.TodoAppUrl) { [weak self] result in
             // 成功と失敗の処理を分岐させ、結果をNotificationCenterでViewContorllerに渡す
             switch result {
-            case .success(let issue):
-            
+            case .success(let issues):
                 // インジケータを表示させるために処理遅延させる
                 DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
+                    var dateItems:[String] = []
                    //  時刻の変換
-//                    issue.forEach { time in
-//                        guard let date =  self?.dateFromString(string: time.updatedAt) else { return }
-//
-//                        guard let dateString = self?.stringFromDate(date: date) else { return }
-//
-//                        sucessDate([dateString])
-//                    }
-                   let updateAt = issue.map{$0.updatedAt}
-                    print(updateAt)
-
-                    sucessIssue(issue)
+                    issues.forEach { issue in
+                        guard let date =  self?.dateFromString(string: issue.updatedAt),
+                              let dateString = self?.stringFromDate(date: date) else { return }
+                        dateItems.append(dateString)
+                    }
+                    sucessDate(dateItems)
+                    sucessIssue(issues)
                 }
             case .failure(let error):
                 failure(error)
             }
-
         }
     }
     // UpdateAtをString型で取得しているのでDate型に変換する

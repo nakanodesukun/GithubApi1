@@ -54,9 +54,9 @@ import UIKit
             do {
                 let error = try error
                 let data = try data
-                let issueDecode = try JSONDecoder().decode([Issue].self, from: data!)
+                let issuesDecode = try JSONDecoder().decode([Issue].self, from: data!)
                 // クロージャーでApiViewModelに成功した時の値を渡す。  // タプルの配列
-                completionHandler(.success(issueDecode))
+                completionHandler(.success(issuesDecode))
             } catch  {
                 // クロージャーでApiViewModelに失敗した値を渡す。
                 completionHandler(.failure(.networkError))

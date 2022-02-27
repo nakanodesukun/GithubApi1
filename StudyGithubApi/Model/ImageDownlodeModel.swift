@@ -24,7 +24,6 @@ final class ImageDownlodeModel {
                 success(imageData!)
             } catch {
                 print("失敗しました", error.localizedDescription)}
-//            failure(error!)
         }
         task.resume()
     }

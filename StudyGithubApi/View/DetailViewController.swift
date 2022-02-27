@@ -9,21 +9,22 @@ import SafariServices
 
 final class DetailViewController: UIViewController{
 
-
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var bodyLabel: UILabel!
     @IBOutlet private weak var didTapUrllabel: UIButton!
     
-    var selectedText: Issue! = nil
+    var selectedText: Issue?
     var dateText: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        giveItem(item: selectedText, detaText: dateText ?? "")
+        giveItem(item: selectedText!, detaText: dateText ?? "")
     }
     // initを使って書いてみる（）
-
+//    init(item: Issue, dateText: String) {
+//
+//    }
 
     private func giveItem(item:Issue, detaText: String) {
         titleLabel.text = item.title
