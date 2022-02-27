@@ -14,27 +14,27 @@ final class DetailViewController: UIViewController{
     @IBOutlet private weak var bodyLabel: UILabel!
     @IBOutlet private weak var didTapUrllabel: UIButton!
     
-    var selectedText: Issue?
-    var dateText: String?
+    var selectedIssue: Issue?
+    var selectedDate: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        giveItem(item: selectedText!, detaText: dateText ?? "")
+        titleLabel.text = selectedIssue?.title
+        bodyLabel.text = selectedIssue?.body
+        dateLabel.text = selectedDate
+//        didTapUrllabel.setTitle("\(describing: selectedIssue!.url)", for: .normal)
+
     }
-    // initを使って書いてみる（）
-//    init(item: Issue, dateText: String) {
-//
-//    }
 
     private func giveItem(item:Issue, detaText: String) {
         titleLabel.text = item.title
         bodyLabel.text = item.body
-        dateLabel.text = dateText
-        didTapUrllabel.setTitle("\(String(describing: selectedText?.url))", for: .normal)
+        dateLabel.text = selectedDate
+//        didTapUrllabel.setTitle("\(String(describing: selectedIssue!.url))", for: .normal)
     }
     
     @IBAction func didTapUrlButton(_ sender: Any) {
-        guard let url = selectedText?.url else {
+        guard let url = selectedIssue?.url else {
             return
         }
         let safariVc = SFSafariViewController(url: url)
@@ -42,4 +42,5 @@ final class DetailViewController: UIViewController{
     }
 
 }
+
 

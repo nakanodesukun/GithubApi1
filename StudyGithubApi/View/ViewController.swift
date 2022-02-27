@@ -9,12 +9,12 @@ import UIKit
 final class ViewController: UIViewController {
 
     private let apiViewModel = ApiViewModel()
-    // Notificationから取得した値を保持する(TableView表示用)
+    // ApiViewModelから値を受け取る
     private var issuesItems:[Issue] = []
     //　ApiViewModelから時刻の表示を受けとる
-    private var dateString: [String] = []
+    private var dateItems:[String] = []
     // TableViewが選択されたときに値を受け取ってDetailViewControllerへ渡すメンバ変数
-    private var selectedText: Issue?
+    private var selectedItem: Issue?
     //  TableViewが選択されたときに値を受け取ってDetailViewControllerへ渡すメンバ変数
     private var selectedDate: String?
     //　タイプミスの恐れがあるので定数で保持
@@ -33,13 +33,15 @@ final class ViewController: UIViewController {
                 self?.activityIndicatorView.stopAnimating()    // アニメーション終了
                 self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
                 self?.issuesItems = issue
+
+                issue.forEach { issue in
+                    guard let date =  self?.dateFromString(string: issue.updatedAt),
+                          let dateString = self?.stringFromDate(date: date) else { return }
+                    self?.dateItems.append(dateString)
+                }
                 self?.tableView.reloadData()
             }
-        } sucessDate: { date in
-            DispatchQueue.main.async { [weak self] in
-                self?.dateString = date
-                self?.tableView.reloadData()
-            }
+
         } failure: { error in
             DispatchQueue.main.async { [weak self] in
                 self?.showAlert(title: error.title, message: error.message, actionTitle: error.actionTitle)
@@ -47,8 +49,22 @@ final class ViewController: UIViewController {
             }
         }
     }
-     // UI表示はViewContollerで
-    func showAlert(title: String, message: String, actionTitle: String) {
+    // UIに関わるのでViewで処理
+    private func dateFromString(string: String) -> Date {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = "yyyy'-'MM'-'dd'T'HH':'mm':'ss'Z'"
+        return formatter.date(from: string)!
+    }
+    // UIに関わるのでViewで処理
+    private func stringFromDate(date: Date) -> String {
+        let formatter: DateFormatter = DateFormatter()
+        formatter.calendar = Calendar(identifier: .gregorian)
+        formatter.dateFormat = "yyyy年MM月dd日HH時mm分"
+        return formatter.string(from: date)
+    }
+     // UIに関わるのでViewで処理
+    private func showAlert(title: String, message: String, actionTitle: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: actionTitle, style: .default, handler: nil)
         alert.addAction(ok)
@@ -57,6 +73,7 @@ final class ViewController: UIViewController {
 
     @IBAction func exit(segue:UIStoryboardSegue)  {
     }
+
 }
 
 extension ViewController: UITableViewDataSource {
@@ -67,7 +84,7 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
 
-        cell.configure(issuesItems: issuesItems[indexPath.row], updateDate: dateString[indexPath.row])
+        cell.configure(issuesItems: issuesItems[indexPath.row], updateDate: dateItems[indexPath.row])
 
         ImageViewModel(issueUrl: issuesItems[indexPath.row].user.avaterURL).getIamgeView { imageView in
             DispatchQueue.main.async {
@@ -77,11 +94,12 @@ extension ViewController: UITableViewDataSource {
         return cell
     }
 }
+
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         // 詳細画面に特定のデータを渡す
-        selectedText = issuesItems[indexPath.row]
-        selectedDate = dateString[indexPath.row]
+        selectedItem = issuesItems[indexPath.row]
+        selectedDate = dateItems[indexPath.row]
 
         // 画面遷移
         performSegue(withIdentifier: detailViewController, sender: nil)
@@ -96,12 +114,14 @@ extension ViewController: UITableViewDelegate {
                   let detailViewcontroller = navigationCentroller.topViewController as? DetailViewController else {
                       return
                   }
-            guard let selectedText = selectedText else {
+            guard let selectedItem = selectedItem,
+                  let selectedData = selectedDate else {
                 return
             }
             // 次の画面への値渡し
-            detailViewcontroller.selectedText = selectedText
-            detailViewcontroller.dateText = selectedDate
+            detailViewcontroller.selectedIssue = selectedItem
+            detailViewcontroller.selectedDate = selectedData
+
         default:
             break
         }
