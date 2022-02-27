@@ -11,12 +11,15 @@ final class CustomCell: UITableViewCell {
     
     @IBOutlet private weak var titleLable: UILabel!
     @IBOutlet private weak var updateDateLabel: UILabel!
-    @IBOutlet weak var iconView: UIImageView!
+    @IBOutlet private weak var iconView: UIImageView!
 
     
     func configure(item: Issue, updateAt: String) {
         titleLable.text = item.title
         updateDateLabel.text = updateAt
+    }
+    func IconViewConfigure(imageView: UIImage) {
+        iconView.image = imageView
     }
 
 }

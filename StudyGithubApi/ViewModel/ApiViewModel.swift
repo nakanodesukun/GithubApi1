@@ -17,13 +17,13 @@ final class ApiViewModel {
     private let apiModel = ApiModel()
 //    private let imageViewModel = ImageViewModel()
     
-    weak var delegate: IssueApiDelegate?
+//    weak var delegate: IssueApiDelegate?
 
     enum urlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
     }
     
-    func getApi() {
+    func getApi(sucessIssue: @escaping([Issue]) -> Void, sucessDate: @escaping ([String]) -> Void, failure: @escaping (ApiModel.ApiError) -> Void) {
         apiModel.fetchData(urlString: urlString.TodoAppUrl) { [weak self] result in
             // 成功と失敗の処理を分岐させ、結果をNotificationCenterでViewContorllerに渡す
             switch result {
@@ -31,35 +31,25 @@ final class ApiViewModel {
             
                 // インジケータを表示させるために処理遅延させる
                 DispatchQueue.global().asyncAfter(deadline: .now() + 1) { [weak self] in
-                    // 時刻の変換
-                    issue.forEach { time in
-                        guard let date =  self?.dateFromString(string: time.updatedAt) else { return }
-                        guard let dateString = self?.stringFromDate(date: date) else { return }
-                        self?.delegate?.fetchIssue(issue: issue, date: dateString)
-//                        ImageViewModel.init(issue: issue)
-                        ImageViewModel(issueUrl: time.user.avaterURL)
-                        
-                        print(time)
-                    }
-                }
+                   //  時刻の変換
+//                    issue.forEach { time in
+//                        guard let date =  self?.dateFromString(string: time.updatedAt) else { return }
+//
+//                        guard let dateString = self?.stringFromDate(date: date) else { return }
+//
+//                        sucessDate([dateString])
+//                    }
+                   let updateAt = issue.map{$0.updatedAt}
+                    print(updateAt)
 
+                    sucessIssue(issue)
+                }
             case .failure(let error):
-                let errorTitle = error.title
-                let errorMessage = error.message
-                let errorActionTitle = error.actionTitle
-                
-                let alert = UIAlertController(title: errorTitle,
-                                              message: errorMessage,
-                                              preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: errorActionTitle,
-                                              style: .default,
-                                              handler: nil))
-                // エラー内容を渡す
-                NotificationCenter.default.post(name: .notifyError, object: alert)
+                failure(error)
             }
+
         }
     }
-
     // UpdateAtをString型で取得しているのでDate型に変換する
     private func dateFromString(string: String) -> Date {
         let formatter: DateFormatter = DateFormatter()

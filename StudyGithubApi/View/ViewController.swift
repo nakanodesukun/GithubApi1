@@ -5,26 +5,15 @@
 //  Created by 中野翔太 on 2022/02/09.
 //
 import UIKit
-protocol IssueApiDelegate: AnyObject {
-    func fetchIssue(issue: [Issue], date: String)
-//    func fetchAvaterURL(iamge: UIImage)
-    func fetchImageView(image: UIImage)
-}
 
-
-final class ViewController: UIViewController, IssueApiDelegate {
+final class ViewController: UIViewController {
 
     private let apiViewModel = ApiViewModel()
-//    private let imageViewModel = ImageViewModel()
-
     // Notificationから取得した値を保持する(TableView表示用)
     private var issueItems:[Issue] = []
     //　ApiViewModelから時刻の表示を受けとる
-    private var dateString: String = ""
-//    var imageViewModel = ImageViewModel(issueUrl: )
-
-    var Iconimage: UIImage?
-    // TableViewが選択されたときに次の画面へ値を渡すグローバル変数
+    private var dateString: [String] = []
+    // TableViewが選択されたときに次の画面へ値を渡すメンバ変数
     private var selectedText: Issue?
     //　タイプミスの恐れがあるので定数で保持
     private let detailViewController = "DetailViewController"
@@ -35,53 +24,37 @@ final class ViewController: UIViewController, IssueApiDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // インジケータの表示開始
-        activityIndicatorView.startAnimating()
+        activityIndicatorView.startAnimating()  // アニメーション開始
 
-//        imageViewModel.getIamgeView()
-//        imageViewModel.delegate = self
-        
-        // 画面が表示されるタイミングで発動
-        apiViewModel.getApi()
-//        imageViewModel.getIamgeView()
-        apiViewModel.delegate = self
-//        imageViewModel.delegate = self
+        apiViewModel.getApi { issue in
+            DispatchQueue.main.async { [weak self] in
+                self?.activityIndicatorView.stopAnimating()    // アニメーション終了
+                self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
+                self?.issueItems = issue
+                print(issue)
+                self?.tableView.reloadData()
+            }
+        } sucessDate: { date in
+            DispatchQueue.main.async { [weak self] in
+                self?.dateString = date
+                self?.tableView.reloadData()
 
-        // ApiViewModelからエラー通知を受け取る
-        NotificationCenter.default.addObserver(self, selector: #selector(getApiError),
-                                               name: .notifyError,
-                                               object: nil)
-    }
-    
-    func fetchIssue(issue: [Issue], date: String) {
-        issueItems = issue
-        dateString = date
-        DispatchQueue.main.async { [weak self] in
-            self?.activityIndicatorView.stopAnimating()    // アニメーション終了
-            self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
-            self?.tableView.reloadData()
+            }
+        } failure: { error in
+            DispatchQueue.main.async { [weak self] in
+                self?.showAlert(title: error.title, message: error.message, actionTitle: error.actionTitle)
+                self?.tableView.reloadData()
+            }
         }
     }
 
-    func fetchImageView(image: UIImage) {
-        Iconimage = image
-        DispatchQueue.main.async { [weak self] in
-            self?.tableView.reloadData()
-        }
+    func showAlert(title: String, message: String, actionTitle: String) {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        let ok = UIAlertAction(title: actionTitle, style: .default, handler: nil)
+        alert.addAction(ok)
+        present(alert, animated: true, completion: nil)
     }
-    // ViewModelからerror通知を受け取る
-    @objc func getApiError(notification: Notification) {
-        guard let alert = notification.object as? UIAlertController else {
-            return
-        }
-        // UIの更新                   // 循環参照を避ける
-        DispatchQueue.main.async { [weak self] in
-            self?.present(alert,
-                          animated: true,
-                          completion: nil)
-            self?.tableView.reloadData()
-        }
-    }
+
     @IBAction func exit(segue:UIStoryboardSegue)  {
     }
 }
@@ -93,22 +66,17 @@ extension ViewController: UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
-        cell.configure(item: issueItems[indexPath.row], updateAt: dateString)
-        cell.iconView.image = Iconimage
-        // 画像の取得/表示  // クロージャーでそのままImageDownLoderModelから取得
-//        imageDownlodeModel.downloadImage(urlString: issueItems[indexPath.row].user.avaterURL,
-//                                          success: { [weak self]  image in
-//            DispatchQueue.main.async { [weak self] in
-//                cell.iconView.image = image
-//            }
-//        })
-
+        cell.configure(item: issueItems[indexPath.row], updateAt: issueItems[indexPath.row].updatedAt)
+        ImageViewModel(issueUrl: issueItems[indexPath.row].user.avaterURL).getIamgeView { imageView in
+            DispatchQueue.main.async {
+                cell.IconViewConfigure(imageView: imageView)
+            }
+        }
         return cell
     }
 }
 extension ViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
         // 詳細画面に特定のデータを渡す
         selectedText = issueItems[indexPath.row]
         // 画面遷移
@@ -127,10 +95,9 @@ extension ViewController: UITableViewDelegate {
             guard let selectedText = selectedText else {
                 return
             }
-
             // 次の画面への値渡し
             detailViewcontroller.selectedText = selectedText
-            detailViewcontroller.dateText = dateString
+            
         default:
             break
         }

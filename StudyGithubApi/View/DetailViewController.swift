@@ -22,6 +22,7 @@ final class DetailViewController: UIViewController{
         super.viewDidLoad()
         giveItem(item: selectedText, detaText: dateText ?? "")
     }
+    // initを使って書いてみる（）
 
 
     private func giveItem(item:Issue, detaText: String) {
