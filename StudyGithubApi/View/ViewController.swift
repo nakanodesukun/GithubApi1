@@ -27,8 +27,11 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicatorView.startAnimating()  // アニメーション開始
+        bind()
+    }
 
-        apiViewModel.getApi { issue in
+    func bind() { //　クロージャーの循環参照する？？
+        apiViewModel.getApi { issue  in
             DispatchQueue.main.async { [weak self] in
                 self?.activityIndicatorView.stopAnimating()    // アニメーション終了
                 self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
@@ -49,6 +52,7 @@ final class ViewController: UIViewController {
             }
         }
     }
+
     // UIに関わるのでViewで処理
     private func dateFromString(string: String) -> Date {
         let formatter: DateFormatter = DateFormatter()
@@ -85,7 +89,7 @@ extension ViewController: UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
 
         cell.configure(issuesItems: issuesItems[indexPath.row], updateDate: dateItems[indexPath.row])
-
+                        // ImageViewModelを呼び出して画像を取得する
         ImageViewModel(issueUrl: issuesItems[indexPath.row].user.avaterURL).getIamgeView { imageView in
             DispatchQueue.main.async {
                 cell.IconViewConfigure(imageView: imageView)

@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		95032A4F27C4E23D0061F880 /* ExtentionNotificationName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 95032A4E27C4E23D0061F880 /* ExtentionNotificationName.swift */; };
 		950399E027B8F75600943D2C /* IssueModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950399DF27B8F75600943D2C /* IssueModel.swift */; };
 		950399E227B8F86800943D2C /* ApiModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950399E127B8F86800943D2C /* ApiModel.swift */; };
 		950399E627BB4BC000943D2C /* DetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950399E527BB4BC000943D2C /* DetailViewController.swift */; };
@@ -24,7 +23,6 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		95032A4E27C4E23D0061F880 /* ExtentionNotificationName.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExtentionNotificationName.swift; sourceTree = "<group>"; };
 		950399DF27B8F75600943D2C /* IssueModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IssueModel.swift; sourceTree = "<group>"; };
 		950399E127B8F86800943D2C /* ApiModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ApiModel.swift; sourceTree = "<group>"; };
 		950399E527BB4BC000943D2C /* DetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DetailViewController.swift; sourceTree = "<group>"; };
@@ -53,14 +51,6 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		95032A4D27C4E20C0061F880 /* ExtentionNotificationName */ = {
-			isa = PBXGroup;
-			children = (
-				95032A4E27C4E23D0061F880 /* ExtentionNotificationName.swift */,
-			);
-			path = ExtentionNotificationName;
-			sourceTree = "<group>";
-		};
 		950399DC27B8F6DB00943D2C /* Model */ = {
 			isa = PBXGroup;
 			children = (
@@ -110,7 +100,6 @@
 		950BF6AC27B3A6CC00BA8ED9 /* StudyGithubApi */ = {
 			isa = PBXGroup;
 			children = (
-				95032A4D27C4E20C0061F880 /* ExtentionNotificationName */,
 				950399DC27B8F6DB00943D2C /* Model */,
 				950399DD27B8F6E500943D2C /* View */,
 				950399DE27B8F6F200943D2C /* ViewModel */,
@@ -200,7 +189,6 @@
 				950BF6B227B3A6CC00BA8ED9 /* ViewController.swift in Sources */,
 				950399E227B8F86800943D2C /* ApiModel.swift in Sources */,
 				950BF6AE27B3A6CC00BA8ED9 /* AppDelegate.swift in Sources */,
-				95032A4F27C4E23D0061F880 /* ExtentionNotificationName.swift in Sources */,
 				950BF6C227B3A88A00BA8ED9 /* CustomCell.swift in Sources */,
 				950BF6B027B3A6CC00BA8ED9 /* SceneDelegate.swift in Sources */,
 				953DB2CE27C9F4F500652B9E /* ImageViewModel.swift in Sources */,
