@@ -8,10 +8,13 @@
 import UIKit
 
 final class CustomCell: UITableViewCell {
+
+    static let nibName = UINib(nibName: "CustomCell", bundle: nil)
+    static let nibId = "Cell"
     
+    @IBOutlet private weak var iconView: UIImageView!
     @IBOutlet private weak var titleLable: UILabel!
     @IBOutlet private weak var updateDateLabel: UILabel!
-    @IBOutlet private weak var iconView: UIImageView!
 
     
     func configure(issuesItems: Issue, updateDate: String) {

@@ -19,6 +19,7 @@
 		950BF6B727B3A6CD00BA8ED9 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 950BF6B627B3A6CD00BA8ED9 /* Assets.xcassets */; };
 		950BF6BA27B3A6CD00BA8ED9 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 950BF6B827B3A6CD00BA8ED9 /* LaunchScreen.storyboard */; };
 		950BF6C227B3A88A00BA8ED9 /* CustomCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 950BF6C127B3A88A00BA8ED9 /* CustomCell.swift */; };
+		9529F7F727CC9D0D00E93E99 /* CustomCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 9529F7F627CC9D0D00E93E99 /* CustomCell.xib */; };
 		953DB2CE27C9F4F500652B9E /* ImageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 953DB2CD27C9F4F500652B9E /* ImageViewModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -37,6 +38,7 @@
 		950BF6B927B3A6CD00BA8ED9 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		950BF6BB27B3A6CD00BA8ED9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		950BF6C127B3A88A00BA8ED9 /* CustomCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomCell.swift; sourceTree = "<group>"; };
+		9529F7F627CC9D0D00E93E99 /* CustomCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = CustomCell.xib; sourceTree = "<group>"; };
 		953DB2CD27C9F4F500652B9E /* ImageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageViewModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -67,6 +69,7 @@
 				950BF6B127B3A6CC00BA8ED9 /* ViewController.swift */,
 				950399E527BB4BC000943D2C /* DetailViewController.swift */,
 				950BF6C127B3A88A00BA8ED9 /* CustomCell.swift */,
+				9529F7F627CC9D0D00E93E99 /* CustomCell.xib */,
 				950BF6B327B3A6CC00BA8ED9 /* Main.storyboard */,
 			);
 			path = View;
@@ -172,6 +175,7 @@
 			files = (
 				950BF6BA27B3A6CD00BA8ED9 /* LaunchScreen.storyboard in Resources */,
 				950BF6B727B3A6CD00BA8ED9 /* Assets.xcassets in Resources */,
+				9529F7F727CC9D0D00E93E99 /* CustomCell.xib in Resources */,
 				950BF6B527B3A6CC00BA8ED9 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -27,7 +27,9 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicatorView.startAnimating()  // アニメーション開始
+        tableView.register(CustomCell.nibName, forCellReuseIdentifier: CustomCell.nibId)
         bind()
+
     }
 
     func bind() { //　クロージャーの循環参照する？？
@@ -86,7 +88,9 @@ extension ViewController: UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell1", for: indexPath) as! CustomCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomCell.nibId, for: indexPath) as? CustomCell else {
+            fatalError("")
+        }
 
         cell.configure(issuesItems: issuesItems[indexPath.row], updateDate: dateItems[indexPath.row])
                         // ImageViewModelを呼び出して画像を取得する
