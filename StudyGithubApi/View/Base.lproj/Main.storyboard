@@ -85,7 +85,7 @@
                                     <action selector="didTapUrlButton:" destination="A7Y-u0-vaT" eventType="touchUpInside" id="Itn-LA-J07"/>
                                 </connections>
                             </button>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="body" lineBreakMode="tailTruncation" numberOfLines="40" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQ4-b2-pVW">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="body" textAlignment="justified" lineBreakMode="tailTruncation" numberOfLines="40" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="PQ4-b2-pVW">
                                 <rect key="frame" x="16" y="323" width="358" height="476"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>

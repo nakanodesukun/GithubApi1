@@ -22,7 +22,7 @@ final class DetailViewController: UIViewController{
         titleLabel.text = selectedIssue?.title
         bodyLabel.text = selectedIssue?.body
         dateLabel.text = selectedDate
-//        didTapUrllabel.setTitle("\(describing: selectedIssue!.url)", for: .normal)
+        didTapUrllabel.setTitle("\(selectedIssue!.url)", for: .normal)
 
     }
 
