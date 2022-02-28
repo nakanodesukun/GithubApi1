@@ -38,8 +38,8 @@
                             <constraint firstAttribute="width" constant="387" id="0zg-EW-Bw4"/>
                             <constraint firstAttribute="height" constant="47" id="jNq-e6-thl"/>
                         </constraints>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                        <nil key="textColor"/>
+                        <fontDescription key="fontDescription" type="system" weight="medium" pointSize="12"/>
+                        <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="displayP3"/>
                         <nil key="highlightedColor"/>
                     </label>
                 </subviews>

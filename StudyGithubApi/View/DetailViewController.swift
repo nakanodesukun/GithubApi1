@@ -8,7 +8,7 @@ import UIKit
 import SafariServices
 
 final class DetailViewController: UIViewController{
-
+    
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var bodyLabel: UILabel!
@@ -23,14 +23,7 @@ final class DetailViewController: UIViewController{
         bodyLabel.text = selectedIssue?.body
         dateLabel.text = selectedDate
         didTapUrllabel.setTitle("\(selectedIssue!.url)", for: .normal)
-
-    }
-
-    private func giveItem(item:Issue, detaText: String) {
-        titleLabel.text = item.title
-        bodyLabel.text = item.body
-        dateLabel.text = selectedDate
-//        didTapUrllabel.setTitle("\(String(describing: selectedIssue!.url))", for: .normal)
+        
     }
     
     @IBAction func didTapUrlButton(_ sender: Any) {
@@ -40,7 +33,7 @@ final class DetailViewController: UIViewController{
         let safariVc = SFSafariViewController(url: url)
         present(safariVc, animated: true, completion: nil)
     }
-
+    
 }
 
 

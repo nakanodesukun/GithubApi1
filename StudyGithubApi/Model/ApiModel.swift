@@ -7,8 +7,7 @@
 
 import UIKit
 
-
- final class ApiModel {
+final class ApiModel {
     // Error準拠させる。(Result<Sucess, Failure>型でエラー処理を行いたいため)
     enum ApiError: Error {
         case invalidURL

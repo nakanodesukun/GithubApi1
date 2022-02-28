@@ -28,11 +28,11 @@ final class ViewController: UIViewController {
         super.viewDidLoad()
         activityIndicatorView.startAnimating()  // アニメーション開始
         tableView.register(CustomCell.nibName, forCellReuseIdentifier: CustomCell.nibId)
-        bind()
+        bindApiData()
 
     }
 
-    func bind() { //　クロージャーの循環参照する？？
+    func bindApiData() { //　クロージャーの循環参照する？？
         apiViewModel.getApi { issue  in
             DispatchQueue.main.async { [weak self] in
                 self?.activityIndicatorView.stopAnimating()    // アニメーション終了
@@ -69,7 +69,7 @@ final class ViewController: UIViewController {
         formatter.dateFormat = "yyyy年MM月dd日HH時mm分"
         return formatter.string(from: date)
     }
-     // UIに関わるのでViewで処理
+    // UIに関わるのでViewで処理
     private func showAlert(title: String, message: String, actionTitle: String) {
         let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
         let ok = UIAlertAction(title: actionTitle, style: .default, handler: nil)
@@ -93,7 +93,7 @@ extension ViewController: UITableViewDataSource {
         }
 
         cell.configure(issuesItems: issuesItems[indexPath.row], updateDate: dateItems[indexPath.row])
-                        // ImageViewModelを呼び出して画像を取得する
+        // ImageViewModelを呼び出して画像を取得する
         ImageViewModel(issueUrl: issuesItems[indexPath.row].user.avaterURL).getIamgeView { imageView in
             DispatchQueue.main.async {
                 cell.IconViewConfigure(imageView: imageView)
@@ -124,8 +124,8 @@ extension ViewController: UITableViewDelegate {
                   }
             guard let selectedItem = selectedItem,
                   let selectedData = selectedDate else {
-                return
-            }
+                      return
+                  }
             // 次の画面への値渡し
             detailViewcontroller.selectedIssue = selectedItem
             detailViewcontroller.selectedDate = selectedData

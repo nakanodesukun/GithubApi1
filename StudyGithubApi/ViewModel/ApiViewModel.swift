@@ -9,12 +9,12 @@
 import UIKit
 
 final class ApiViewModel {
-
-    private let apiModel = ApiModel()
-//    private let imageViewModel = ImageViewModel()
     
-//    weak var delegate: IssueApiDelegate?
-// modelにする
+    private let apiModel = ApiModel()
+    //    private let imageViewModel = ImageViewModel()
+    
+    //    weak var delegate: IssueApiDelegate?
+    // modelにする
     enum urlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
     }

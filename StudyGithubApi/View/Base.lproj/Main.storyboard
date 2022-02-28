@@ -97,11 +97,11 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="date" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="sUp-2e-XS6">
-                                <rect key="frame" x="16" y="97" width="272" height="21"/>
+                                <rect key="frame" x="75" y="99" width="240" height="16"/>
                                 <color key="backgroundColor" systemColor="systemGray5Color"/>
                                 <constraints>
-                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="272" id="YX6-6C-0TE"/>
-                                    <constraint firstAttribute="height" constant="21" id="faH-qZ-MzI"/>
+                                    <constraint firstAttribute="width" relation="greaterThanOrEqual" constant="240" id="RNy-6c-MSU"/>
+                                    <constraint firstAttribute="height" constant="16" id="x4f-O4-WmT"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" type="system" pointSize="13"/>
                                 <color key="textColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -112,18 +112,18 @@
                         <color key="backgroundColor" systemColor="systemGray5Color"/>
                         <constraints>
                             <constraint firstItem="JVl-TL-tcM" firstAttribute="top" secondItem="ngK-WT-8fg" secondAttribute="bottom" constant="36" id="2St-dc-U3a"/>
-                            <constraint firstItem="sUp-2e-XS6" firstAttribute="top" secondItem="tey-wR-dMA" secondAttribute="top" constant="9" id="44y-p4-2wo"/>
+                            <constraint firstItem="sUp-2e-XS6" firstAttribute="leading" secondItem="tey-wR-dMA" secondAttribute="leading" constant="75" id="56u-r4-MB4"/>
                             <constraint firstItem="PQ4-b2-pVW" firstAttribute="leading" secondItem="tey-wR-dMA" secondAttribute="leading" constant="16" id="5OF-KD-ThR"/>
                             <constraint firstItem="tey-wR-dMA" firstAttribute="bottom" secondItem="PQ4-b2-pVW" secondAttribute="bottom" constant="11" id="PYG-25-JUN"/>
                             <constraint firstItem="tey-wR-dMA" firstAttribute="trailing" secondItem="PQ4-b2-pVW" secondAttribute="trailing" constant="16" id="SN7-Uq-OJn"/>
+                            <constraint firstItem="tey-wR-dMA" firstAttribute="trailing" secondItem="sUp-2e-XS6" secondAttribute="trailing" constant="75" id="Wzk-S5-8ld"/>
                             <constraint firstItem="tey-wR-dMA" firstAttribute="trailing" secondItem="ngK-WT-8fg" secondAttribute="trailing" constant="16" id="YmS-9a-imA"/>
                             <constraint firstItem="ngK-WT-8fg" firstAttribute="leading" secondItem="tey-wR-dMA" secondAttribute="leading" constant="16" id="egf-Vi-HOK"/>
                             <constraint firstItem="JVl-TL-tcM" firstAttribute="leading" secondItem="tey-wR-dMA" secondAttribute="leading" constant="16" id="fVG-DO-pGx"/>
-                            <constraint firstItem="ngK-WT-8fg" firstAttribute="top" secondItem="sUp-2e-XS6" secondAttribute="bottom" constant="34" id="g5T-Sa-zUb"/>
+                            <constraint firstItem="ngK-WT-8fg" firstAttribute="top" secondItem="sUp-2e-XS6" secondAttribute="bottom" constant="37" id="gnW-Zp-O90"/>
                             <constraint firstItem="tey-wR-dMA" firstAttribute="trailing" secondItem="JVl-TL-tcM" secondAttribute="trailing" constant="16" id="jYz-gT-jYm"/>
-                            <constraint firstItem="sUp-2e-XS6" firstAttribute="leading" secondItem="tey-wR-dMA" secondAttribute="leading" constant="16" id="mhO-hZ-fRW"/>
+                            <constraint firstItem="sUp-2e-XS6" firstAttribute="top" secondItem="tey-wR-dMA" secondAttribute="top" constant="11" id="tsQ-K4-Yav"/>
                             <constraint firstItem="PQ4-b2-pVW" firstAttribute="top" secondItem="JVl-TL-tcM" secondAttribute="bottom" constant="18" id="xSO-g9-2dQ"/>
-                            <constraint firstItem="tey-wR-dMA" firstAttribute="trailing" secondItem="sUp-2e-XS6" secondAttribute="trailing" constant="102" id="y61-DQ-vxR"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="詳細画面" id="1Qb-JK-iGm">

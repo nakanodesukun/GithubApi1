@@ -6,17 +6,18 @@
 //
 
 import UIKit
+
 class ImageViewModel {
     let imageDownlodeModel = ImageDownlodeModel()
 
-   private var issueUrl: URL
+    private var issueUrl: URL
 
-   init(issueUrl: URL) {
-       self.issueUrl = issueUrl
+    init(issueUrl: URL) {
+        self.issueUrl = issueUrl
     }
 
     func getIamgeView(imageHandler: @escaping (UIImage) -> Void) {
-        imageDownlodeModel.downloadImage(urlString: issueUrl) { image in
+        imageDownlodeModel.downloadImage(url: issueUrl) { image in
             imageHandler(image)
         }
     }
