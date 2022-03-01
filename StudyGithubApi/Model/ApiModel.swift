@@ -38,10 +38,13 @@ final class ApiModel {
             }
         }
     }
+    
+    enum urlString {
+        static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
+    }
     //  Result<Sucess, Failure>型でエラー処理
-    func fetchData(urlString: String,
-                   completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
-        guard let url = URL(string: urlString) else {
+    func fetchData(completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
+        guard let url = URL(string: urlString.TodoAppUrl) else {
             //
             completionHandler(.failure(.invalidURL))
             return
@@ -54,10 +57,10 @@ final class ApiModel {
                 let error = try error
                 let data = try data
                 let issuesDecode = try JSONDecoder().decode([Issue].self, from: data!)
-                // クロージャーでApiViewModelに成功した時の値を渡す。  // タプルの配列
+                // ApiViewModelに成功した時の値を渡す。  // タプルの配列
                 completionHandler(.success(issuesDecode))
             } catch  {
-                // クロージャーでApiViewModelに失敗した値を渡す。
+                // ApiViewModelに失敗した値を渡す。
                 completionHandler(.failure(.networkError))
             }
         }

@@ -22,8 +22,10 @@ final class DetailViewController: UIViewController{
         titleLabel.text = selectedIssue?.title
         bodyLabel.text = selectedIssue?.body
         dateLabel.text = selectedDate
-        didTapUrllabel.setTitle("\(selectedIssue!.url)", for: .normal)
-        
+        guard let linkTitle = selectedIssue?.url else {
+            return
+        }
+        didTapUrllabel.setTitle("\(linkTitle)", for: .normal)
     }
     
     @IBAction func didTapUrlButton(_ sender: Any) {
@@ -33,7 +35,6 @@ final class DetailViewController: UIViewController{
         let safariVc = SFSafariViewController(url: url)
         present(safariVc, animated: true, completion: nil)
     }
-    
 }
 
 

@@ -11,8 +11,8 @@ final class ViewController: UIViewController {
     private let apiViewModel = ApiViewModel()
     // ApiViewModelから値を受け取る
     private var issuesItems:[Issue] = []
-    //　ApiViewModelから時刻の表示を受けとる
-    private var dateItems:[String] = []
+    //　変換した日付を配列で保持する
+    private var dateItems:[String] = [] 
     // TableViewが選択されたときに値を受け取ってDetailViewControllerへ渡すメンバ変数
     private var selectedItem: Issue?
     //  TableViewが選択されたときに値を受け取ってDetailViewControllerへ渡すメンバ変数
@@ -27,21 +27,21 @@ final class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicatorView.startAnimating()  // アニメーション開始
-        tableView.register(CustomCell.nibName, forCellReuseIdentifier: CustomCell.nibId)
         bindApiData()
-
+        tableView.register(CustomCell.nibName, forCellReuseIdentifier: CustomCell.nibId)
     }
 
-    func bindApiData() { //　クロージャーの循環参照する？？
-        apiViewModel.getApi { issue  in
+    private func bindApiData() { //　クロージャーの循環参照する？？
+        apiViewModel.getApi { issues  in
             DispatchQueue.main.async { [weak self] in
                 self?.activityIndicatorView.stopAnimating()    // アニメーション終了
                 self?.activityIndicatorView.hidesWhenStopped = true  // アニメーション非表示
-                self?.issuesItems = issue
+                self?.issuesItems = issues
 
-                issue.forEach { issue in
+                issues.forEach { issue in
                     guard let date =  self?.dateFromString(string: issue.updatedAt),
                           let dateString = self?.stringFromDate(date: date) else { return }
+                    // 変換した日付を
                     self?.dateItems.append(dateString)
                 }
                 self?.tableView.reloadData()
@@ -108,7 +108,6 @@ extension ViewController: UITableViewDelegate {
         // 詳細画面に特定のデータを渡す
         selectedItem = issuesItems[indexPath.row]
         selectedDate = dateItems[indexPath.row]
-
         // 画面遷移
         performSegue(withIdentifier: detailViewController, sender: nil)
         // セルの選択を解除
@@ -129,7 +128,6 @@ extension ViewController: UITableViewDelegate {
             // 次の画面への値渡し
             detailViewcontroller.selectedIssue = selectedItem
             detailViewcontroller.selectedDate = selectedData
-
         default:
             break
         }

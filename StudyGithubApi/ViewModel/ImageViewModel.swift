@@ -7,8 +7,8 @@
 
 import UIKit
 
-class ImageViewModel {
-    let imageDownlodeModel = ImageDownlodeModel()
+final class ImageViewModel {
+    private let imageDownlodeModel = ImageDownlodeModel()
 
     private var issueUrl: URL
 
