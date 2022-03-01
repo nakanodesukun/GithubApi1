@@ -16,12 +16,13 @@ final class ImageDownlodeModel {
             // guard let文は安全にプログラムを進めれるが,ユーザー目線で考えるとエラーの表示内容は限られるのでdo-catch文を使った。
             do {
                 let error = try error
+                let response = try response
                 let data = try data
                 let imageData = UIImage(data: data!)
                 // 成功したらUIImage型のデータを渡す。
                 success(imageData!)
             } catch {
-                print("失敗しました", error.localizedDescription)}
+                print(error.localizedDescription)}
         }
         task.resume()
     }

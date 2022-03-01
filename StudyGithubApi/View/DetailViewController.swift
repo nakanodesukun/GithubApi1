@@ -7,16 +7,16 @@
 import UIKit
 import SafariServices
 
-final class DetailViewController: UIViewController{
-    
+final class DetailViewController: UIViewController {
+
     @IBOutlet private weak var dateLabel: UILabel!
     @IBOutlet private weak var titleLabel: UILabel!
     @IBOutlet private weak var bodyLabel: UILabel!
     @IBOutlet private weak var didTapUrllabel: UIButton!
-    
+
     var selectedIssue: Issue?
     var selectedDate: String?
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         titleLabel.text = selectedIssue?.title
@@ -27,7 +27,7 @@ final class DetailViewController: UIViewController{
         }
         didTapUrllabel.setTitle("\(linkTitle)", for: .normal)
     }
-    
+
     @IBAction func didTapUrlButton(_ sender: Any) {
         guard let url = selectedIssue?.url else {
             return
@@ -36,5 +36,3 @@ final class DetailViewController: UIViewController{
         present(safariVc, animated: true, completion: nil)
     }
 }
-
-

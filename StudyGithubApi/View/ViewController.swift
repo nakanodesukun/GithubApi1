@@ -10,20 +10,20 @@ final class ViewController: UIViewController {
 
     private let apiViewModel = ApiViewModel()
     // ApiViewModelから値を受け取る
-    private var issuesItems:[Issue] = []
+    private var issuesItems: [Issue] = []
     //　変換した日付を配列で保持する
-    private var dateItems:[String] = [] 
+    private var dateItems: [String] = []
     // TableViewが選択されたときに値を受け取ってDetailViewControllerへ渡すメンバ変数
     private var selectedItem: Issue?
     //  TableViewが選択されたときに値を受け取ってDetailViewControllerへ渡すメンバ変数
     private var selectedDate: String?
     //　タイプミスの恐れがあるので定数で保持
     private let detailViewController = "DetailViewController"
-    
+
     @IBOutlet private weak var activityIndicatorView: UIActivityIndicatorView!
-    
+
     @IBOutlet private weak var tableView: UITableView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         activityIndicatorView.startAnimating()  // アニメーション開始
@@ -77,7 +77,7 @@ final class ViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
 
-    @IBAction func exit(segue:UIStoryboardSegue)  {
+    @IBAction func exit(segue: UIStoryboardSegue) {
     }
 
 }
@@ -86,17 +86,17 @@ extension ViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         issuesItems.count
     }
-    
+
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: CustomCell.nibId, for: indexPath) as? CustomCell else {
-            fatalError("")
+            fatalError()
         }
 
         cell.configure(issuesItems: issuesItems[indexPath.row], updateDate: dateItems[indexPath.row])
         // ImageViewModelを呼び出して画像を取得する
         ImageViewModel(issueUrl: issuesItems[indexPath.row].user.avaterURL).getIamgeView { imageView in
             DispatchQueue.main.async {
-                cell.IconViewConfigure(imageView: imageView)
+                cell.iconViewConfigure(imageView: imageView)
             }
         }
         return cell

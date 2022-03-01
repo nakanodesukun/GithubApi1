@@ -12,7 +12,7 @@ final class ApiModel {
     enum ApiError: Error {
         case invalidURL
         case networkError
-        
+    
         var title: String {
             switch self {
             case .invalidURL:
@@ -38,13 +38,13 @@ final class ApiModel {
             }
         }
     }
-    
-    enum urlString {
+
+    enum UrlString {
         static let TodoAppUrl = "https://api.github.com/repos/app-dojo-salon/ToDoAppEx/issues"
     }
     //  Result<Sucess, Failure>型でエラー処理
     func fetchData(completionHandler: @escaping (Result<[Issue], ApiError>) -> Void) {
-        guard let url = URL(string: urlString.TodoAppUrl) else {
+        guard let url = URL(string: UrlString.TodoAppUrl) else {
             //
             completionHandler(.failure(.invalidURL))
             return
@@ -55,11 +55,12 @@ final class ApiModel {
             // guard let文は安全にプログラムを進めれるが,ユーザー目線で考えるとエラーの表示内容は限られるのでdo-catch文を使った。
             do {
                 let error = try error
+                let response = try response
                 let data = try data
                 let issuesDecode = try JSONDecoder().decode([Issue].self, from: data!)
                 // ApiViewModelに成功した時の値を渡す。  // タプルの配列
                 completionHandler(.success(issuesDecode))
-            } catch  {
+            } catch {
                 // ApiViewModelに失敗した値を渡す。
                 completionHandler(.failure(.networkError))
             }
@@ -67,6 +68,3 @@ final class ApiModel {
         task.resume()
     }
 }
-
-
-

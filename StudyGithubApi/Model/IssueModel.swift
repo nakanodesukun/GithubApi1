@@ -7,14 +7,14 @@
 
 import Foundation
 
-struct Issue: Codable  {
+struct Issue: Codable {
     let number: Int
     let title: String
     let body: String
     let url: URL
     let updatedAt: String
     let user: User
-    
+
     enum CodingKeys: String, CodingKey {
         case number, title, body, url, user
         case updatedAt = "updated_at"
